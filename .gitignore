@@ -1,0 +1,38 @@
+## Build results
+[Bb]in/
+[Oo]bj/
+*.exe
+*.dll
+*.pdb
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio files
+.vs/
+
+## Dotnet tools
+.dotnet/
+
+## Logs
+*.log
+
+## NuGet packages
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+## OS generated files
+.DS_Store
+Thumbs.db
+
+## Rider IDE
+.idea/
+
+## Others
+*.db
+*.sqlite
