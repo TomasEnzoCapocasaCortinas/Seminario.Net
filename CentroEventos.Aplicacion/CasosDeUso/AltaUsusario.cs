@@ -24,7 +24,7 @@ private readonly IRepositorioUsuario Repositorio;
         Validador.Validar(nuevoUsuario);
 
         if (Repositorio.ObtenerPorEmail(nuevoUsuario.Email) != null)
-            throw new Exception("Ya existe un usuario con ese email.");
+            throw new DuplicadoException("Ya existe un usuario con ese email.");
 
         // Primer Usuario
         if (!Repositorio.HayUsuarios())

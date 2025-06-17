@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Concurrent;
 using CentroEventos.Aplicacion.Interfaces; //agregue esto
-using CentroEventos.Aplicacion.Entidades; //agregue esto
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Excepciones; //agregue esto
 
 
 namespace CentroEventos.Aplicacion;
@@ -13,13 +14,16 @@ public class PersonaValidador
     {
         RepositorioP = repositorio;
     }
-    public bool Validar(Persona p)
+    public void Validar(Persona persona)
     {
-        if ((string.IsNullOrWhiteSpace(p.Nombre)) ||(string.IsNullOrWhiteSpace(p.Apellido)) || (string.IsNullOrWhiteSpace(p.Email)))
-        {
-            return false;
-        }
-        else return true;
+    if (persona == null)
+        throw new ValidacionException("La persona no puede ser nula.");
+    if (string.IsNullOrWhiteSpace(persona.Nombre))
+        throw new ValidacionException("El nombre es obligatorio.");
+    if (string.IsNullOrWhiteSpace(persona.Apellido))
+        throw new ValidacionException("El apellido es obligatorio.");
+    if (string.IsNullOrWhiteSpace(persona.Email))
+        throw new ValidacionException("El email es obligatorio.");
     }
     public bool IdUnico(Persona p) {
         var pAux = RepositorioP.ObtenerPorId(p.IdUsuario);

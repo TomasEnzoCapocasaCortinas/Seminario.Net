@@ -1,6 +1,7 @@
 
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Enumerativos;
+using CentroEventos.Aplicacion.Excepciones;
 
 namespace CentroEventos.Aplicacion.Servicio;
 
@@ -12,13 +13,12 @@ public class ServicioAutorizacion : IServicioAutorizacion
         Repositorio = repo;
     }
 
-    public void PoseeElPermiso(int idUsuario, Permiso permisoRequerido)
+    public bool PoseeElPermiso(int idUsuario, Permiso permisoRequerido)
     {
         var usuario = Repositorio.ObtenerPorId(idUsuario)
-            ?? throw new Exception("Usuario no encontrado");
+            ?? throw new EntidadNotFoundException("El usuario no existe");
 
-        if (!usuario.Permisos.Contains(permisoRequerido))
-            throw new Exception($"No tiene permiso: {permisoRequerido}");
+        return usuario.Permisos.Contains(permisoRequerido);
     }
 
 }

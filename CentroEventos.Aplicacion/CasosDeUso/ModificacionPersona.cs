@@ -7,15 +7,26 @@ namespace CentroEventos.Aplicacion.CasosDeUso;
 public class CasoDeUsoModificacionPersona
 {
     private readonly IRepositorioPersona RepositorioP;
+    private readonly PersonaValidador Validador;
 
-    public CasoDeUsoModificacionPersona(IRepositorioPersona repositorio)
+    public CasoDeUsoModificacionPersona(IRepositorioPersona repositorio, PersonaValidador validador)
     {
         RepositorioP = repositorio;
+        Validador = validador;
     }
 
-    public void Ejecutar (Persona personaActualizada)
+    public void Ejecutar(Persona personaActualizada)
     {
-        if (!RepositorioP.Actualizar(personaActualizada))
-            throw new EntidadNotFoundException("No se encontró la persona a actualizar.");
+        var persona = RepositorioP.ObtenerPorId(personaActualizada.IdUsuario)
+            ?? throw new EntidadNotFoundException("No se encontró la persona");
+
+        Validador.Validar(personaActualizada);
+        if (!Validador.DNIUnico(personaActualizada))
+            throw new DuplicadoException("Ya existe otra persona con ese DNI");
+
+        if (!Validador.EmailUnico(personaActualizada))
+            throw new DuplicadoException("Ya existe otra persona con ese email");
+            
+        RepositorioP.Actualizar(personaActualizada);
     }
 }

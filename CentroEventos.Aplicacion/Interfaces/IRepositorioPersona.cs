@@ -12,6 +12,6 @@ public interface IRepositorioPersona
     Persona? ObtenerPorEmail(string email);
     List<Persona> ObtenerTodas();
     void Actualizar(Persona persona);
-    void Eliminar(int id);
+    bool Eliminar(int id);
 }
 
