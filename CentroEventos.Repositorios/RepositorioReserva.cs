@@ -1,4 +1,4 @@
-using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Entidades; //actualizado con base de datos
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Enumerativos;
 using System.Globalization;
@@ -7,102 +7,75 @@ namespace CentroEventos.Repositorios
 {
     public class RepositorioReserva : IRepositorioReserva
     {
-        private readonly string _rutaArchivo = "Data/reservas.txt";
-        private readonly string _rutaUltimoId = "Data/ultima_reserva_id.txt";
+        private readonly CentroEventosDbContext dataBase;
 
-        public RepositorioReserva()
+        public RepositorioReserva(CentroEventosDbContext db)
         {
-            Directory.CreateDirectory("Data");
-
-            if (!File.Exists(_rutaArchivo))
-                File.Create(_rutaArchivo).Close();
-
-            if (!File.Exists(_rutaUltimoId))
-                File.WriteAllText(_rutaUltimoId, "0");
-        }
-
-        private int ObtenerNuevoId()
-        {
-            int ultimoId = int.Parse(File.ReadAllText(_rutaUltimoId));
-            int nuevoId = ultimoId + 1;
-            File.WriteAllText(_rutaUltimoId, nuevoId.ToString());
-            return nuevoId;
+            dataBase = db;
         }
 
         public void Agregar(Reserva reserva)
         {
-            reserva.Id = ObtenerNuevoId();
-            var linea = $"{reserva.Id},{reserva.PersonaId},{reserva.EventoDeportivoId},{reserva.FechaAltaReserva:o},{reserva.EstadoAsistencia}";
-            File.AppendAllLines(_rutaArchivo, new[] { linea });
-        }
-
-        public void Eliminar(int id)
-        {
-            var reservas = ObtenerTodos().Where(r => r.Id != id).ToList();
-            SobrescribirArchivo(reservas);
+            dataBase.Reservas.Add(reserva);
+            dataBase.SaveChanges();
         }
 
         public void Modificar(Reserva reserva)
         {
-            var reservas = ObtenerTodos().Select(r => r.Id == reserva.Id ? reserva : r).ToList();
-            SobrescribirArchivo(reservas);
+            dataBase.Reservas.Update(reserva);
+            dataBase.SaveChanges();
+        }
+
+        public void Eliminar(int id)
+        {
+            var reserva = dataBase.Reservas.Find(id);
+            if (reserva != null)
+            {
+                dataBase.Reservas.Remove(reserva);
+                dataBase.SaveChanges();
+            }
         }
 
         public Reserva? ObtenerPorId(int id)
         {
-            return ObtenerTodos().FirstOrDefault(r => r.Id == id);
+            return dataBase.Reservas.Find(id);
         }
 
         public List<Reserva> ObtenerTodos()
         {
-            var lineas = File.ReadAllLines(_rutaArchivo);
-            var lista = new List<Reserva>();
-
-            foreach (var linea in lineas)
-            {
-                var partes = linea.Split(',');
-
-                if (partes.Length < 5)
-                    continue;
-
-                lista.Add(new Reserva
-                {
-                    Id = int.Parse(partes[0]),
-                    PersonaId = int.Parse(partes[1]),
-                    EventoDeportivoId = int.Parse(partes[2]),
-                    FechaAltaReserva = DateTime.Parse(partes[3], null, DateTimeStyles.RoundtripKind),
-                    EstadoAsistencia = Enum.Parse<EstadoAsistencia>(partes[4])
-                });
-            }
-
-            return lista;
+            return dataBase.Reservas.ToList();
         }
 
-        private void SobrescribirArchivo(List<Reserva> reservas)
+        public bool ExisteReservaParaPersonaYEvento(int personaId, int eventoDeportivoId)
         {
-            var lineas = reservas.Select(r =>
-                $"{r.Id},{r.PersonaId},{r.EventoDeportivoId},{r.FechaAltaReserva:o},{r.EstadoAsistencia}");
-            File.WriteAllLines(_rutaArchivo, lineas);
+            return dataBase.Reservas.Any(r =>
+                r.PersonaId == personaId && r.EventoDeportivoId == eventoDeportivoId);
         }
 
-        public bool ExisteReservaParaPersonaYEvento(int personaId, int eventoId)
+        public int ContarReservasPorEvento(int eventoDeportivoId)
         {
-            return ObtenerTodos().Any(r => r.PersonaId == personaId && r.EventoDeportivoId == eventoId);
+            return dataBase.Reservas.Count(r => r.EventoDeportivoId == eventoDeportivoId);
         }
 
-        public int ContarReservasPorEvento(int eventoId)
+        public List<Reserva> ObtenerReservasPorEvento(int eventoDeportivoId)
         {
-            return ObtenerTodos().Count(r => r.EventoDeportivoId == eventoId);
-        }
+            var evento = dataBase.EventosDeportivos.FirstOrDefault(e => e.ID == eventoDeportivoId);
+            if (evento == null || evento.FechaHoraInicio > DateTime.Now)
+                return new List<Reserva>();
 
-        public List<Reserva> ObtenerReservasPorEvento(int eventoId)
-        {
-            return ObtenerTodos().Where(r => r.EventoDeportivoId == eventoId).ToList();
+            return dataBase.Reservas
+                .Where(r => r.EventoDeportivoId == eventoDeportivoId)
+                .ToList();
         }
+    public List<Reserva> ObtenerReservasPorPersona(int personaId)
+    {
+        var persona = dataBase.Personas.FirstOrDefault(e => e.IdUsuario == personaId);
+        if (persona == null)
+            return new List<Reserva>();
 
-        public List<Reserva> ObtenerReservasPorPersona(int personaId)
-        {
-            return ObtenerTodos().Where(r => r.PersonaId == personaId).ToList();
-        }
+        return dataBase.Reservas
+            .Where(r => r.PersonaId == personaId)
+            .ToList();
+    }
     }
 }

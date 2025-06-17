@@ -6,11 +6,12 @@ namespace CentroEventos.Aplicacion.Interfaces;
 
 public interface IRepositorioPersona
 {
-    Persona Agregar(Persona persona);
+    void Agregar(Persona persona);
     Persona? ObtenerPorId(int id);
     Persona? ObtenerPorDNI(string dni);
     Persona? ObtenerPorEmail(string email);
     List<Persona> ObtenerTodas();
-    bool Actualizar(Persona persona);
-    bool Eliminar(int id);
+    void Actualizar(Persona persona);
+    void Eliminar(int id);
 }
+
