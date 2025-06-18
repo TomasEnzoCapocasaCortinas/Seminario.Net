@@ -18,6 +18,15 @@ namespace CentroEventos.Repositorios
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Persona>().HasIndex(p => p.Dni).IsUnique();
             modelBuilder.Entity<Persona>().HasIndex(p => p.Email).IsUnique();
+            modelBuilder.Entity<Persona>(entidad =>
+            {
+                entidad.HasKey(p => p.IdUsuario);
+                entidad.Property(p => p.Dni).IsRequired().HasMaxLength(20);
+                entidad.Property(p => p.Nombre).IsRequired().HasMaxLength(100);
+                entidad.Property(p => p.Apellido).IsRequired().HasMaxLength(100);
+                entidad.Property(p => p.Email).IsRequired().HasMaxLength(200);
+                entidad.Property(p => p.Tel).HasMaxLength(15);
+            });
 
             modelBuilder.Entity<Reserva>()
                 .Property(r => r.EstadoAsistencia)
@@ -25,7 +34,7 @@ namespace CentroEventos.Repositorios
 
             
             modelBuilder.Entity<Reserva>(entidad =>
-            {
+            {  
                 entidad.HasKey(r => r.Id);
                 entidad.Property(r => r.PersonaId).IsRequired();
                 entidad.Property(r => r.EventoDeportivoId).IsRequired();
