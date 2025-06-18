@@ -1,0 +1,23 @@
+﻿@page "/EventoDeportivo"
+@rendermode InteractiveServer
+@using System;
+@inject AltaEventoDeportivo altaEventoDeportivo
+<input placeholder="Nombre del evento" @bind="_evento.Nombre" />
+<input placeholder="Descripción del evento" @bind="_evento.Descripcion" />
+<!-- <input placeholder="Fecha de inicio" type="date" @bind="_evento.FechaInicio" /> ARREGLAR TEMA INGRESO DE FECHA-->
+<input placeholder="Duración (en horas)" @bind="_evento.DuracionHoras" />
+<input placeholder="Cupo máximo" @bind="_evento.CupoMaximo" />
+<input placeholder="Responsable ID" type="number" @bind="_evento.ResponsableID  " />
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+@code {
+    EventoDeportivo _evento = new EventoDeportivo
+    {
+        FechaHoraInicio = DateTime.Now // Asignar la fecha y hora actual como valor por defecto
+    };
+
+    void Aceptar()
+    {
+        altaEventoDeportivo.Ejecutar(_evento,1); //HACER QUE EL ID SEA AUTOINCREMENTAL
+        _evento = new EventoDeportivo(); // Reiniciar el formulario
+    }
+}

@@ -1,0 +1,32 @@
+﻿@page "/listado-eventos-deportivos"
+@rendermode InteractiveServer
+@inject ObtenerTodosEventosDeportivos obtenerEventosDeportivos
+<table class="table">
+   <thead>
+       <tr>
+           <th>ID</th>
+           <th>NOMBRE</th>
+           <th>DESCRIPCION</th>
+           <!--<th>INICIO</th> -->
+           <!--<th>DURACION</th> -->
+           <!--<th>CUPOMAXIMO</th> -->
+           <!--<th>RESPONSABLEID</th> -->
+           <!-- Este es un comentario HTML -->
+       </tr>
+   </thead>
+   <tbody>
+       @foreach (var eve in _lista)
+       {
+           <tr>
+               <td>@eve.ID</td>
+               <td>@eve.Nombre</td>
+               <td>@eve.Descripcion</td>
+           </tr>
+       }
+   </tbody>
+</table>
+@code {
+    List<EventoDeportivo> _lista = new List<EventoDeportivo>();
+
+
+}

@@ -42,13 +42,15 @@ public class PersonaRepositorio : IRepositorioPersona
         dataBase.SaveChanges();
     }
 
-    public void Eliminar(int id)
+    public bool Eliminar(int id)
     {
         var persona = dataBase.Personas.Find(id);
         if (persona != null)
         {
             dataBase.Personas.Remove(persona);
             dataBase.SaveChanges();
+            return true;
         }
+        return false;
     }
 }
