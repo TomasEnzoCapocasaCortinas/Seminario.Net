@@ -2,6 +2,7 @@
 @using CentroEventos.Aplicacion.Entidades;
 @using CentroEventos.Aplicacion.CasosDeUso;
 @rendermode InteractiveServer
+@inject EliminarEventoDeportivo eliminarEventoDeportivo
 @inject ObtenerTodosEventosDeportivos obtenerEventosDeportivos
 <table class="table">
    <thead>
@@ -23,22 +24,42 @@
                <td>@eve.ID</td>
                <td>@eve.Nombre</td>
                <td>@eve.Descripcion</td>
+               <!--Agregar Otro Campos-->
+               <td> 
+                <button class="btn btn-primary">
+                    Editar
+                </button>
+                <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(eve)">
+                    Eliminar
+                </button>
+               </td>
            </tr>
        }
    </tbody>
 </table>
 @code {
     List<EventoDeportivo> _lista = new List<EventoDeportivo>();
+    protected override void OnInitialized()
+    {
+        _lista = obtenerEventosDeportivos.Ejecutar().ToList(); //Porque hace falta añadir el toList?
+    }
+    DialogoConfirmacion dialogo=null!;
+    EventoDeportivo? _EventoParaEliminar = null;
+    private void ConfirmarEliminacion(EventoDeportivo eve)
+    {
+        _EventoParaEliminar = eve;
+       // dialogo.Mensaje = $"¿Está seguro que desea eliminar el evento deportivo {eve.Nombre}?";
+       //Modificique el codigo de DialogoConfirmacion para que reciba el mensaje como parametro
+        dialogo.Mostrar($"¿Está seguro que desea eliminar el evento deportivo {eve.Nombre}?");
+    }
+    private void Eliminar()
+    {
+        if (_EventoParaEliminar != null)
+        {
+            eliminarEventoDeportivo.Ejecutar(_EventoParaEliminar.ID);
+            _lista= obtenerEventosDeportivos.Ejecutar().ToList();
+        }
 
+    }
 
 }
-using CentroEventos.Aplicacion.CasosDeUso;
-#line default
-    using CentroEventos.Aplicacion.CasosDeUso;
-
-#nullable disable
-#line default
-    using CentroEventos.Aplicacion.CasosDeUso;
-
-#nullable disable
-#line default
