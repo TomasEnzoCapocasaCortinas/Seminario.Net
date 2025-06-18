@@ -4,12 +4,18 @@ using CentroEventos.Repositorios;
 using CentroEventos.Aplicacion;
 using CentroEventos.Aplicacion.CasosDeUso;
 using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Validadores;
+using CentroEventos.Aplicacion.Servicio;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDbContext<CentroEventosDbContext>(options =>
+    options.UseSqlite("Data Source=centroeventos.db"));
 
 //Agregamos servicios al contenedor DI
 //Trabsient: se crea una nueva instancia cada vez que se inyecta
@@ -36,6 +42,12 @@ builder.Services.AddScoped<IRepositorioEventoDeportivo, RepositorioEventoDeporti
 builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
 builder.Services.AddScoped<IRepositorioPersona, PersonaRepositorio>();
 builder.Services.AddScoped<IRepositorioReserva, RepositorioReserva>();
+
+builder.Services.AddScoped<ValidadorUsuario>();
+builder.Services.AddScoped<PersonaValidador>();
+builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacion>();
+builder.Services.AddScoped<ServicioSesionUsuario, ServicioSesionUsuario>();
+builder.Services.AddScoped<ServicioUsuario, ServicioUsuario>();
 
 var app = builder.Build();
 
