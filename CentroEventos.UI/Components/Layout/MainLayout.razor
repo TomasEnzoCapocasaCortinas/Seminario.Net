@@ -3,10 +3,11 @@
 @inject NavigationManager Navigation
 
 <div class="page">
+    @if (Sesion.EstaAutenticado()){
     <div class="sidebar">
         <NavMenu />
     </div>
-
+    }
     <main>
         <div class="top-row px-4 justify-content-end">
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank" class="me-3">About</a>
