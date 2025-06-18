@@ -1,0 +1,47 @@
+@page "/login"
+@using CentroEventos.Aplicacion.Interfaces
+@using CentroEventos.Aplicacion.Servicio
+@using CentroEventos.Aplicacion.Entidades
+
+@inject ServicioUsuario ServicioUsuarios
+@inject ServicioSesionUsuario Sesion
+@inject NavigationManager Navigation
+
+<h3>Iniciar Sesión</h3>
+
+<EditForm Model="@usuarioInput" OnValidSubmit="IniciarSesion">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Correo:</label>
+        <InputText @bind-Value="usuarioInput.Email" class="form-control" />
+    </div>
+    <div>
+        <label>Contraseña:</label>
+        <InputText @bind-Value="usuarioInput.Contrasenia" type="password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Iniciar sesión</button>
+
+    @if (!string.IsNullOrEmpty(mensajeError))
+    {
+        <p class="text-danger">@mensajeError</p>
+    }
+</EditForm>
+
+@code {
+    private Usuario usuarioInput = new();
+    private string mensajeError = "";
+
+    private void IniciarSesion()
+    {
+        var usuario = ServicioUsuarios.IniciarSesion(usuarioInput.Email, usuarioInput.Contrasenia);
+
+        if (usuario is null)
+        {
+            mensajeError = "Correo o contraseña inválidos.";
+            return;
+        }
+        Navigation.NavigateTo("/");
+    }
+}

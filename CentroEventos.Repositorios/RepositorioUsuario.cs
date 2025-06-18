@@ -1,6 +1,9 @@
 using System; //actualizado con base de datos
+using System.Security.Cryptography;
+using System.Text;
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Entidades;
+
 
 namespace CentroEventos.Repositorios;
 
@@ -13,14 +16,35 @@ private readonly CentroEventosDbContext dataBase;
         dataBase = db;
     }
 
-    public void Agregar(Usuario usuario)
+    public Usuario Agregar(Usuario usuario)
     {
+        //hash contrasenia SHA256 del espacio de nombres System.Security.Cryptography
+        usuario.Contrasenia = ObtenerHashSHA256(usuario.Contrasenia);
         dataBase.Usuarios.Add(usuario);
         dataBase.SaveChanges();
+        return usuario; 
     }
 
+    static string ObtenerHashSHA256(string input)
+    {
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(input);             // Convertir la cadena a bytes
+            byte[] hashBytes = sha256.ComputeHash(bytes);             // Obtener el hash
+
+            // Convertir el hash a string hexadecimal
+            StringBuilder builder = new StringBuilder();
+            foreach (byte b in hashBytes)
+            {
+                builder.Append(b.ToString("x2")); // Formato hexadecimal
+            }
+
+            return builder.ToString();
+        }
+    }
     public void Modificar(Usuario usuario)
     {
+        usuario.Contrasenia = ObtenerHashSHA256(usuario.Contrasenia); // Asegurarse de que la contraseña esté hasheada
         dataBase.Usuarios.Update(usuario);
         dataBase.SaveChanges();
     }

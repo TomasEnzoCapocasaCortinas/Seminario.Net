@@ -1,0 +1,72 @@
+@page "/registro"
+@using CentroEventos.Aplicacion.Interfaces
+@using CentroEventos.Aplicacion.Servicio
+@using CentroEventos.Aplicacion.Entidades
+@inject NavigationManager Nav
+@inject IRepositorioUsuario ServicioUsuarios
+@inject ServicioSesionUsuario Sesion
+
+<h3>Registro de nuevo usuario</h3>
+
+<EditForm Model="@usuario" OnValidSubmit="Registrar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Nombre:</label>
+        <InputText @bind-Value="usuario.Nombre" />
+    </div>
+    <div>
+        <label>Apellido:</label>
+        <InputText @bind-Value="usuario.Apellido" />
+    </div>
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="usuario.Email" />
+    </div>
+    <div>
+        <label>Contraseña:</label>
+        <InputText @bind-Value="contraseña" type="password" />
+    </div>
+    <div>
+        <label>Confirmar contraseña:</label>
+        <InputText @bind-Value="confirmar" type="password" />
+    </div>
+    <button type="submit">Registrarse</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <p style="color:red">@error</p>
+}
+
+@code {
+    private Usuario usuario = new();
+    private string contraseña = string.Empty;
+    private string confirmar = string.Empty;
+    private string? error;
+
+    private void Registrar()
+    {
+        error = null;
+
+        if (contraseña != confirmar)
+        {
+            error = "Las contraseñas no coinciden.";
+            return;
+        }
+
+        try
+        {
+            var usuarioCreado = ServicioUsuarios.Agregar(usuario);
+            Sesion.IniciarSesion(usuarioCreado);
+            Nav.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}
+using CentroEventos.Aplicacion.Entidades;
+#line default

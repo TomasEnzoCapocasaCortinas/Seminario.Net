@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject ServicioSesionUsuario Sesion
+@inject NavigationManager Navigation
 
 <div class="page">
     <div class="sidebar">
@@ -6,8 +8,19 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        <div class="top-row px-4 justify-content-end">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank" class="me-3">About</a>
+
+            @if (Sesion.EstaAutenticado())
+            {
+                <span class="me-2">👋 Hola, @Sesion.ObtenerUsuarioActual().Nombre</span>
+                <button class="btn btn-outline-danger btn-sm" @onclick="CerrarSesion">Cerrar sesión</button>
+            }
+            else
+            {
+                <a class="btn btn-outline-primary btn-sm me-2" href="/login">Iniciar sesión</a>
+                <a class="btn btn-outline-success btn-sm" href="/registrar">Registrar</a>
+            }
         </div>
 
         <article class="content px-4">
@@ -21,3 +34,11 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    private void CerrarSesion()
+    {
+        Sesion.CerrarSesion();
+        Navigation.NavigateTo("/login");
+    }
+}
