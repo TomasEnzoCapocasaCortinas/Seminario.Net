@@ -1,6 +1,8 @@
 ﻿@page "/EventoDeportivo"
 @rendermode InteractiveServer
 @using System;
+@using CentroEventos.Aplicacion.Entidades;
+@using CentroEventos.Aplicacion.CasosDeUso;
 @inject AltaEventoDeportivo altaEventoDeportivo
 <input placeholder="Nombre del evento" @bind="_evento.Nombre" />
 <input placeholder="Descripción del evento" @bind="_evento.Descripcion" />
