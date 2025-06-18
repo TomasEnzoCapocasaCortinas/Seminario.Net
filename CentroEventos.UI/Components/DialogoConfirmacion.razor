@@ -1,5 +1,26 @@
-﻿<h3>DialogoConfirmacion</h3>
+﻿
+@rendermode InteractiveServer
+@if(visible)
+{
+   <h3>@Mensaje</h3>
+   <button class="btn btn-primary" @onclick="Cerrar">Aceptar</button>
+   <button class="btn btn-secondary" @onclick="Cerrar">Cancelar</button>
+}
 
-@code {
+@code{
+   private bool visible = false;
+   [Parameter]
+   public string Mensaje {get;set;}="";
 
+   public void Mostrar(string Mensaje)
+   {
+       this.Mensaje = Mensaje;
+       visible=true;
+       StateHasChanged();
+   }
+
+   void Cerrar()
+   {
+       visible=false;
+   }
 }
