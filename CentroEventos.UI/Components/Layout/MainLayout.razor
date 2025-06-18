@@ -9,9 +9,7 @@
     </div>
     }
     <main>
-        <div class="top-row px-4 justify-content-end">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank" class="me-3">About</a>
-
+        <div class="top-row px-4 justify-content-end d-flex">
             @if (Sesion.EstaAutenticado())
             {
                 <span class="me-2">👋 Hola, @Sesion.ObtenerUsuarioActual().Nombre</span>
@@ -19,7 +17,6 @@
             }
             else
             {
-                <div><h1>Bienvenidos</h1></div>
                 <div>
                 <a class="btn btn-outline-primary btn-sm me-2" href="/login">Iniciar sesión</a>
                 </div>
@@ -29,7 +26,7 @@
             }
         </div>
 
-        <article class="content px-4">
+        <article class="content px-4 d-flex flex-column min-vh-100">
             @Body
         </article>
     </main>
