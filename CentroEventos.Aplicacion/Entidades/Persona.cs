@@ -12,6 +12,16 @@ public class Persona
     public string Apellido{set;get;}
     public string Email{set;get;} //consulta repo
     public string? Tel{set;get;}
+
+    public Persona()
+    {
+        this.IdUsuario = 0;
+        this.Dni = string.Empty;
+        this.Nombre = string.Empty;
+        this.Apellido = string.Empty;
+        this.Email = string.Empty;
+        this.Tel = null;
+    }
     public Persona(int id, string nom, string apellido, string dni, string email, string tel)
     {
         this.IdUsuario = id;

@@ -8,31 +8,41 @@
 
 <h3>Registro de nuevo usuario</h3>
 
-<EditForm Model="@usuario" OnValidSubmit="Registrar">
+<EditForm Model="@usuario" OnValidSubmit="Registrar" FormName="registroUsuario">
     <DataAnnotationsValidator />
     <ValidationSummary />
+    
+    <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <InputText id="nombre" @bind-Value="usuario.Nombre" class="form-control" />
+        <ValidationMessage For="@(() => usuario.Nombre)" />
+    </div>
 
-    <div>
-        <label>Nombre:</label>
-        <InputText @bind-Value="usuario.Nombre" />
+    <div class="form-group">
+        <label for="apellido">Apellido:</label>
+        <InputText id="apellido" @bind-Value="usuario.Apellido" class="form-control" />
+        <ValidationMessage For="@(() => usuario.Apellido)" />
     </div>
-    <div>
-        <label>Apellido:</label>
-        <InputText @bind-Value="usuario.Apellido" />
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="usuario.Email" class="form-control" />
+        <ValidationMessage For="@(() => usuario.Email)" />
     </div>
-    <div>
-        <label>Email:</label>
-        <InputText @bind-Value="usuario.Email" />
+
+    <div class="form-group">
+        <label for="password">Contraseña:</label>
+        <InputText id="password" @bind-Value="usuario.Contrasenia" type="password" class="form-control" />
+        <ValidationMessage For="@(() => usuario.Contrasenia)" />
     </div>
-    <div>
-        <label>Contraseña:</label>
-        <InputText @bind-Value="contraseña" type="password" />
+
+    <div class="form-group">
+        <label for="confirmPassword">Confirmar contraseña:</label>
+        <InputText id="confirmPassword" @bind-Value="confirmar" type="password" class="form-control" />
+        <small class="text-danger">@error</small>
     </div>
-    <div>
-        <label>Confirmar contraseña:</label>
-        <InputText @bind-Value="confirmar" type="password" />
-    </div>
-    <button type="submit">Registrarse</button>
+
+    <button type="submit" class="btn btn-primary">Registrarse</button>
 </EditForm>
 
 @if (!string.IsNullOrEmpty(error))

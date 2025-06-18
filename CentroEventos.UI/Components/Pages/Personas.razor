@@ -1,0 +1,119 @@
+@page "/personas"
+@using CentroEventos.Aplicacion.Servicio
+@inject IRepositorioPersona ServicioPersonas
+
+<h3>Gestión de Personas</h3>
+
+@if (mostrarFormulario)
+{
+    <EditForm Model="@personaEdicion" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-2">
+            <label>Nombre:</label>
+            <InputText @bind-Value="personaEdicion.Nombre" class="form-control" />
+        </div>
+        <div class="mb-2">
+            <label>Apellido:</label>
+            <InputText @bind-Value="personaEdicion.Apellido" class="form-control" />
+        </div>
+        <div class="mb-2">
+            <label>DNI:</label>
+            <InputText @bind-Value="personaEdicion.Dni" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success me-2">Guardar</button>
+        <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+    </EditForm>
+}
+else
+{
+    <button class="btn btn-primary mb-3" @onclick="NuevaPersona">Agregar Persona</button>
+}
+
+@if (personas.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in personas)
+            {
+                <tr>
+                    <td>@p.Nombre</td>
+                    <td>@p.Apellido</td>
+                    <td>@p.Dni</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm me-2" @onclick="@(() => Editar(p))">Editar</button>
+                        <button class="btn btn-danger btn-sm" @onclick="@(() => Eliminar(p.IdUsuario))">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay personas registradas.</p>
+}
+
+@code {
+    private List<Persona> personas = new();
+    private Persona personaEdicion = new();
+    private bool mostrarFormulario = false;
+    private bool esNueva = true;
+
+    protected override void OnInitialized()
+    {
+        personas = ServicioPersonas.ObtenerTodas();
+    }
+
+    void NuevaPersona()
+    {
+        personaEdicion = new Persona();
+        mostrarFormulario = true;
+        esNueva = true;
+    }
+
+    void Editar(Persona persona)
+    {
+        personaEdicion = new Persona
+        {
+            IdUsuario = persona.IdUsuario,
+            Nombre = persona.Nombre,
+            Apellido = persona.Apellido,
+            Dni = persona.Dni
+        };
+        mostrarFormulario = true;
+        esNueva = false;
+    }
+
+    void Guardar()
+    {
+        if (esNueva)
+            ServicioPersonas.Agregar(personaEdicion);
+        else
+            ServicioPersonas.Actualizar(personaEdicion);
+
+        personas = ServicioPersonas.ObtenerTodas();
+        mostrarFormulario = false;
+    }
+
+    void Eliminar(int id)
+    {
+        ServicioPersonas.Eliminar(id);
+        personas = ServicioPersonas.ObtenerTodas();
+    }
+
+    void Cancelar()
+    {
+        mostrarFormulario = false;
+    }
+}
