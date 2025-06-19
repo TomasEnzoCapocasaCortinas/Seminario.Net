@@ -1,6 +1,7 @@
 @page "/misreservas"
 @using CentroEventos.Aplicacion.Interfaces
 @using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.Enumerativos
 @inject IRepositorioReserva RepositorioReservas
 @inject ServicioSesionUsuario Sesion
 @inject IRepositorioEventoDeportivo RepositorioEventos
@@ -33,6 +34,17 @@ else
                     <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evento.DuracionHoras hs</td>
                     <td>@reserva.EstadoAsistencia</td>
+                    <td>
+                        @if (evento.FechaHoraInicio > DateTime.Now)
+                        {
+                            <button class="btn btn-danger btn-sm" @onclick="() => CancelarReserva(reserva.Id)">Cancelar</button>
+                        }
+                        else if (reserva.EstadoAsistencia == EstadoAsistencia.Pendiente)
+                        {
+                            <button class="btn btn-success btn-sm" @onclick="() => MarcarAsistencia(reserva.Id, EstadoAsistencia.Presente)">Presente</button>
+                            <button class="btn btn-warning btn-sm" @onclick="() => MarcarAsistencia(reserva.Id, EstadoAsistencia.Ausente)">Ausente</button>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -43,6 +55,7 @@ else
     private Usuario? usuarioActual;
     private List<Reserva>? misReservas;
     private Dictionary<int, EventoDeportivo> eventosPorId = new();
+    private string? mensaje;
 
     protected override void OnInitialized()
     {
@@ -50,7 +63,12 @@ else
 
         if (usuarioActual != null)
         {
-            misReservas = RepositorioReservas.ObtenerReservasPorPersona(usuarioActual.Id);
+            CargarReservas();
+        }
+        
+    }
+    private void CargarReservas(){
+        misReservas = RepositorioReservas.ObtenerReservasPorPersona(usuarioActual.Id);
 
             var eventosIds = misReservas.Select(r => r.EventoDeportivoId).Distinct();
             foreach (var id in eventosIds)
@@ -59,6 +77,24 @@ else
                 if (evento != null)
                     eventosPorId[id] = evento;
             }
+    }
+    private void CancelarReserva(int reservaId)
+    {
+        RepositorioReservas.Eliminar(reservaId);
+        mensaje = "Reserva cancelada correctamente.";
+        CargarReservas();
+        StateHasChanged();
+    }
+    private void MarcarAsistencia(int reservaId, EstadoAsistencia nuevoEstado)
+    {
+        var reserva = misReservas.FirstOrDefault(r => r.Id == reservaId);
+        if (reserva != null)
+        {
+            reserva.EstadoAsistencia = nuevoEstado;
+            RepositorioReservas.Modificar(reserva);
+            mensaje = $"Asistencia marcada como {nuevoEstado}.";
+            CargarReservas();
+            StateHasChanged();
         }
     }
 }
