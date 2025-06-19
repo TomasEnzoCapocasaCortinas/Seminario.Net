@@ -1,0 +1,65 @@
+@page "/misreservas"
+@using CentroEventos.Aplicacion.Interfaces
+@using CentroEventos.Aplicacion.Entidades
+@inject IRepositorioReserva RepositorioReservas
+@inject ServicioSesionUsuario Sesion
+@inject IRepositorioEventoDeportivo RepositorioEventos
+
+<PageTitle>Mis Reservas</PageTitle>
+
+<h1>Mis Reservas</h1>
+
+@if (misReservas == null)
+{
+    <p><em>No Tenés ninguna reserva.</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Evento</th>
+                <th>Fecha</th>
+                <th>Duracion</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reserva in misReservas)
+            {
+                var evento = eventosPorId[reserva.EventoDeportivoId];
+                <tr>
+                    <td>@evento.Nombre</td>
+                    <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@evento.DuracionHoras hs</td>
+                    <td>@reserva.EstadoAsistencia</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code
+{
+    private Usuario? usuarioActual;
+    private List<Reserva>? misReservas;
+    private Dictionary<int, EventoDeportivo> eventosPorId = new();
+
+    protected override void OnInitialized()
+    {
+        usuarioActual = Sesion.ObtenerUsuarioActual();
+
+        if (usuarioActual != null)
+        {
+            misReservas = RepositorioReservas.ObtenerReservasPorPersona(usuarioActual.Id);
+
+            var eventosIds = misReservas.Select(r => r.EventoDeportivoId).Distinct();
+            foreach (var id in eventosIds)
+            {
+                var evento = RepositorioEventos.ObtenerPorId(id);
+                if (evento != null)
+                    eventosPorId[id] = evento;
+            }
+        }
+    }
+}
+
