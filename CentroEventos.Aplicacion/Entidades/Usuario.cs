@@ -26,5 +26,5 @@ public class Usuario
 
         set => PermisosL = string.Join(",", value.Select(p => p.ToString()));
     }
-    public DateTime FechaCreacion { get; set; }
+    public DateTime FechaCreacion { get; set; } = DateTime.Now;
 }

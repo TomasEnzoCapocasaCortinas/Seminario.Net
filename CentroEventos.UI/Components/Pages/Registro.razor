@@ -12,11 +12,18 @@
 <h3>Registro de nuevo usuario</h3>
 
 <input placeholder="Nombre" @bind="usuario.Nombre" class="form-control">
+<br>
+<br>
 <input placeholder="Apellido" @bind="usuario.Apellido" class="form-control">
+<br>
+<br>
 <input placeholder="Email" @bind="usuario.Email" class="form-control">
+<br>
+<br>
 <input type="password" placeholder="Contraseña" @bind="usuario.Contrasenia" class="form-control">
 <br>
-<button class="btn btn-primary" @onclick="Registrar">Aceptar</button>
+<br>
+<button class="btn btn-primary" @onclick="Registrar">Registrarse</button>
 
 
 @if (!string.IsNullOrEmpty(error))
