@@ -26,8 +26,8 @@ public class PersonaValidador
         throw new ValidacionException("El email es obligatorio.");
     }
     public bool IdUnico(Persona p) {
-        var pAux = RepositorioP.ObtenerPorId(p.IdUsuario);
-        if (pAux != null && p.IdUsuario == pAux.IdUsuario)
+        var pAux = RepositorioP.ObtenerPorId(p.Id);
+        if (pAux != null && p.Id == pAux.Id)
         {
             return false;
         }

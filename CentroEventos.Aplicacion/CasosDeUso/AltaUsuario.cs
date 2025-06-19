@@ -8,12 +8,12 @@ using CentroEventos.Aplicacion.Enumerativos;
 
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class AltaUsusario
+public class AltaUsuario
 {
 private readonly IRepositorioUsuario Repositorio;
     private readonly ValidadorUsuario Validador;
 
-    public AltaUsusario(IRepositorioUsuario repo, ValidadorUsuario validador)
+    public AltaUsuario(IRepositorioUsuario repo, ValidadorUsuario validador)
     {
         Repositorio = repo;
         Validador = validador;
