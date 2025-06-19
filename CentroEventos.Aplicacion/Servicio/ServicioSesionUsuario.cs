@@ -15,7 +15,7 @@ public class ServicioSesionUsuario
 
     public void IniciarSesion(Usuario usuario)
     {
-        _usuarioActual = usuario;
+        this._usuarioActual = usuario;
     }
 
     public void CerrarSesion()

@@ -8,8 +8,11 @@ using CentroEventos.Aplicacion.Validadores;
 using CentroEventos.Aplicacion.Servicio;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<CentroEventosDbContext>(options =>
+    options.UseSqlite("Data Source=centroeventos.db"));
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -20,7 +23,7 @@ builder.Services.AddDbContext<CentroEventosDbContext>(options =>
 //Agregamos servicios al contenedor DI
 //Trabsient: se crea una nueva instancia cada vez que se inyecta
 builder.Services.AddTransient<AltaEventoDeportivo>();
-builder.Services.AddTransient<AltaUsusario>();
+builder.Services.AddTransient<AltaUsuario>();
 builder.Services.AddTransient<CasoDeUsoAltaPersona>();
 builder.Services.AddTransient<ReservaAlta>();
 builder.Services.AddTransient<EliminarEventoDeportivo>();
@@ -38,6 +41,7 @@ builder.Services.AddTransient<CasoDeUsoModificacionPersona>();
 builder.Services.AddTransient<ReservaModificacion>();
 
 //Scoped: se crea una nueva instancia por cada solicitud
+builder.Services.AddScoped<CentroEventosSqlite>();
 builder.Services.AddScoped<IRepositorioEventoDeportivo, RepositorioEventoDeportivo>();
 builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
 builder.Services.AddScoped<IRepositorioPersona, PersonaRepositorio>();
@@ -55,6 +59,13 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
+}
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<CentroEventosDbContext>();
+    db.Database.EnsureCreated();
 }
 
 app.UseStaticFiles();

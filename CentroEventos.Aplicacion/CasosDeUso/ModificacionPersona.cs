@@ -17,7 +17,7 @@ public class CasoDeUsoModificacionPersona
 
     public void Ejecutar(Persona personaActualizada)
     {
-        var persona = RepositorioP.ObtenerPorId(personaActualizada.IdUsuario)
+        var persona = RepositorioP.ObtenerPorId(personaActualizada.Id)
             ?? throw new EntidadNotFoundException("No se encontró la persona");
 
         Validador.Validar(personaActualizada);

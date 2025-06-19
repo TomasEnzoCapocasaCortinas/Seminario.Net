@@ -6,7 +6,7 @@ namespace CentroEventos.Aplicacion.Entidades;
 
 public class Persona
 {
-    public int IdUsuario{set;get;}
+    public int Id{set;get;}
     public string Dni{set;get;} //consulta repo
     public string Nombre{set;get;}
     public string Apellido{set;get;}
@@ -15,7 +15,7 @@ public class Persona
 
     public Persona()
     {
-        this.IdUsuario = 0;
+        this.Id = 0;
         this.Dni = string.Empty;
         this.Nombre = string.Empty;
         this.Apellido = string.Empty;
@@ -24,7 +24,7 @@ public class Persona
     }
     public Persona(int id, string nom, string apellido, string dni, string email, string tel)
     {
-        this.IdUsuario = id;
+        this.Id = id;
         this.Nombre = nom;
         this.Apellido = apellido;
         this.Dni = dni;
