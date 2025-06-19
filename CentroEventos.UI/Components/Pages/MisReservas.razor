@@ -63,7 +63,13 @@ else
 
         if (usuarioActual != null)
         {
-            misReservas = RepositorioReservas.ObtenerReservasPorPersona(usuarioActual.Id);
+            CargarReservas();
+        }
+        
+    }
+
+    private void CargarReservas(){
+        misReservas = RepositorioReservas.ObtenerReservasPorPersona(usuarioActual!.Id);
 
             var eventosIds = misReservas.Select(r => r.EventoDeportivoId).Distinct();
             foreach (var id in eventosIds)
@@ -72,10 +78,8 @@ else
                 if (evento != null)
                     eventosPorId[id] = evento;
             }
-        }
-        
     }
-    @* private void CancelarReserva(int reservaId)
+     private void CancelarReserva(int reservaId)
     {
         RepositorioReservas.Eliminar(reservaId);
         mensaje = "Reserva cancelada correctamente.";
@@ -84,7 +88,7 @@ else
     }
     private void MarcarAsistencia(int reservaId, EstadoAsistencia nuevoEstado)
     {
-        var reserva = misReservas.FirstOrDefault(r => r.Id == reservaId);
+        var reserva = misReservas!.FirstOrDefault(r => r.Id == reservaId);
         if (reserva != null)
         {
             reserva.EstadoAsistencia = nuevoEstado;
@@ -93,6 +97,6 @@ else
             CargarReservas();
             StateHasChanged();
         }
-    } *@
+    } 
 }
 

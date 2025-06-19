@@ -17,10 +17,8 @@ builder.Services.AddDbContext<CentroEventosDbContext>(options =>
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddDbContext<CentroEventosDbContext>(options =>
-    options.UseSqlite("Data Source=centroeventos.db"));
-
 builder.Services.AddScoped<ServicioSesionUsuario>();
+builder.Services.AddBlazoredLocalStorage();
 //Agregamos servicios al contenedor DI
 //Trabsient: se crea una nueva instancia cada vez que se inyecta
 builder.Services.AddTransient<AltaEventoDeportivo>();

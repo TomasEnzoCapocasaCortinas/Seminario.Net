@@ -100,7 +100,7 @@
             return;
         }
 
-        if (RepositorioReservas.ExisteReservaParaPersonaYEvento(usuarioActual.Id, eventoSeleccionado.ID))
+        if (RepositorioReservas.ExisteReservaParaPersonaYEvento(usuarioActual!.Id, eventoSeleccionado.ID))
         {
             mensaje = "Ya estás inscripta en este evento.";
             return;
