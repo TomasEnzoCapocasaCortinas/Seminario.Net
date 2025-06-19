@@ -1,4 +1,5 @@
 @page "/registrar"
+@using System
 @using CentroEventos.Aplicacion.Interfaces
 @using CentroEventos.Aplicacion.Servicio
 @using CentroEventos.Aplicacion.Entidades
@@ -50,7 +51,7 @@
 
 @code {
     private Usuario usuario = new();
-    private string contrasenia = string.Empty;
+    //private string contrasenia = string.Empty;
     private string? error;
 
     private void Registrar()
@@ -59,8 +60,7 @@
         
         try
         {
-            usuario.Contrasenia = contrasenia;
-            //SUsuario.Registrar(usuario);
+            //usuario.Contrasenia = contrasenia;
             AltaUsuario.Ejecutar(usuario);
             Sesion.IniciarSesion(usuario);
             Nav.NavigateTo("/");

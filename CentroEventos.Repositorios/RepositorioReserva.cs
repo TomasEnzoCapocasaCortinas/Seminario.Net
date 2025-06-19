@@ -69,7 +69,7 @@ namespace CentroEventos.Repositorios
         }
     public List<Reserva> ObtenerReservasPorPersona(int personaId)
     {
-        var persona = dataBase.Personas.FirstOrDefault(e => e.IdUsuario == personaId);
+        var persona = dataBase.Personas.FirstOrDefault(e => e.Id == personaId);
         if (persona == null)
             return new List<Reserva>();
 
