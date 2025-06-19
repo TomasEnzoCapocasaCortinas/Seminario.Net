@@ -9,22 +9,14 @@
     </div>
     }
     <main>
-        <div class="top-row px-4 justify-content-end d-flex">
-            @if (Sesion.EstaAutenticado())
-            {
+        
+        @if (Sesion.EstaAutenticado())
+        {
+            <div class="top-row px-4 justify-content-end d-flex">
                 <span class="me-2">👋 Hola, @Sesion.ObtenerUsuarioActual().Nombre</span>
                 <button class="btn btn-outline-danger btn-sm" @onclick="CerrarSesion">Cerrar sesión</button>
-            }
-            else
-            {
-                <div>
-                <a class="btn btn-outline-primary btn-sm me-2" href="/login">Iniciar sesión</a>
-                </div>
-                <div>
-                <a class="btn btn-outline-success btn-sm" href="/registrar">Registrar</a>
-                </div>
-            }
-        </div>
+            </div>
+        }
 
         <article class="content px-4 d-flex flex-column min-vh-100">
             @Body

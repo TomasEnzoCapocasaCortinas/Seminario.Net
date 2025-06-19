@@ -2,7 +2,9 @@
 @using CentroEventos.Aplicacion.Interfaces
 @using CentroEventos.Aplicacion.Servicio
 @using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.Validadores
 @inject NavigationManager Nav
+@inject AltaUsusario AltaUsusario
 @inject IRepositorioUsuario ServicioUsuarios
 @inject ServicioSesionUsuario Sesion
 
@@ -14,7 +16,7 @@
     
     <div class="form-group">
         <label for="nombre">Nombre:</label>
-        <InputText id="nombre" @bind-Value="usuario.Nombre" class="form-control" />
+        <InputText id="nombre" class="form-control" @bind-Value="usuario.Nombre" />
         <ValidationMessage For="@(() => usuario.Nombre)" />
     </div>
 
@@ -36,13 +38,14 @@
         <ValidationMessage For="@(() => usuario.Contrasenia)" />
     </div>
 
-    <div class="form-group">
+    <div class="form-group"> *
         <label for="confirmPassword">Confirmar contraseña:</label>
         <InputText id="confirmPassword" @bind-Value="confirmar" type="password" class="form-control" />
         <small class="text-danger">@error</small>
     </div>
-
-    <button type="submit" class="btn btn-primary">Registrarse</button>
+    <div class="d-flex justify-content-center align-item-center">
+        <button type="submit" class="btn btn-primary">Registrarse</button>
+    </div>
 </EditForm>
 
 @if (!string.IsNullOrEmpty(error))
@@ -68,6 +71,7 @@
 
         try
         {
+            AltaUsusario.Ejecutar(usuario);
             var usuarioCreado = ServicioUsuarios.Agregar(usuario);
             Sesion.IniciarSesion(usuarioCreado);
             Nav.NavigateTo("/");
@@ -78,5 +82,3 @@
         }
     }
 }
-using CentroEventos.Aplicacion.Entidades;
-#line default
