@@ -3,7 +3,7 @@
 @using CentroEventos.Aplicacion.Servicio
 @using CentroEventos.Aplicacion.Entidades
 @inject NavigationManager Nav
-@inject AltaUsusario AltaUsusario
+@inject AltaUsuario AltaUsuario
 @inject IRepositorioUsuario ServicioUsuarios
 @inject ServicioSesionUsuario Sesion
 @inject ServicioUsuario SUsuario
@@ -61,7 +61,7 @@
         {
             usuario.Contrasenia = contrasenia;
             //SUsuario.Registrar(usuario);
-            AltaUsusario.Ejecutar(usuario);
+            AltaUsuario.Ejecutar(usuario);
             Sesion.IniciarSesion(usuario);
             Nav.NavigateTo("/");
         }
