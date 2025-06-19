@@ -2,6 +2,8 @@
 @using CentroEventos.Aplicacion.Entidades;
 @using CentroEventos.Aplicacion.CasosDeUso;
 @rendermode InteractiveServer
+@inject ServicioSesionUsuario Sesion
+@inject IRepositorioEventoDeportivo RepositorioEventos
 @inject EliminarEventoDeportivo eliminarEventoDeportivo
 @inject ObtenerTodosEventosDeportivos obtenerEventosDeportivos
 
@@ -11,19 +13,18 @@
 
 @if (miseventos == null)
 {
-    <p><em>No Tenés ninguna reserva.</em></p>
+    <p><em>No Tenés ninguna evento.</em></p>
 }
+else{
 <table class="table">
    <thead>
        <tr>
            <th>ID</th>
-           <th>NOMBRE</th>
-           <th>DESCRIPCION</th>
-           <!--<th>INICIO</th> -->
-           <!--<th>DURACION</th> -->
-           <!--<th>CUPOMAXIMO</th> -->
-           <!--<th>RESPONSABLEID</th> -->
-           <!-- Este es un comentario HTML -->
+           <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Fecha y hora</th>
+            <th>Duración</th>
+            <th>Cupo máximo</th>
        </tr>
    </thead>
    <tbody>
@@ -33,24 +34,29 @@
                <td>@evento.ID</td>
                <td>@evento.Nombre</td>
                <td>@evento.Descripcion</td>
-               <!--Agregar Otro Campos-->
+               <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
+               <td>@evento.DuracionHoras hs</td>
+               <td>@evento.CupoMaximo</td>
                <td> 
-                <button class="btn btn-primary">
-                    Editar
-                </button>
-                <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(evento)">
-                    Eliminar
-                </button>
+                <button class="btn btn-primary"> Editar</button>
+                <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(evento)">Eliminar</button>
                </td>
            </tr>
        }
    </tbody>
 </table>
+}
 @code {
-    List<EventoDeportivo> miseventos = new List<EventoDeportivo>();
+    private Usuario? usuarioActual;
+    private List<EventoDeportivo>? miseventos;
     protected override void OnInitialized()
     {
-        miseventos = obtenerEventosDeportivos.Ejecutar().ToList(); //Porque hace falta añadir el toList?
+        usuarioActual = Sesion.ObtenerUsuarioActual();
+
+        if (usuarioActual != null)
+        {
+            miseventos = obtenerEventosDeportivos.Ejecutar().ToList();
+        }
     }
     DialogoConfirmacion dialogo=null!;
     EventoDeportivo? _EventoParaEliminar = null;
