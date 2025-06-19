@@ -2,7 +2,6 @@
 @using CentroEventos.Aplicacion.Interfaces
 @using CentroEventos.Aplicacion.Servicio
 @using CentroEventos.Aplicacion.Entidades
-@using CentroEventos.Aplicacion.Validadores
 @inject NavigationManager Nav
 @inject AltaUsusario AltaUsusario
 @inject IRepositorioUsuario ServicioUsuarios
@@ -16,7 +15,7 @@
     
     <div class="form-group">
         <label for="nombre">Nombre:</label>
-        <InputText id="nombre" class="form-control" @bind-Value="usuario.Nombre" />
+        <InputText placeholder="Nombre" id="nombre" class="form-control" @bind-Value="usuario.Nombre" />
         <ValidationMessage For="@(() => usuario.Nombre)" />
     </div>
 
@@ -68,12 +67,11 @@
             error = "Las contraseñas no coinciden.";
             return;
         }
-
+        usuario.Contrasenia = contraseña;
         try
         {
             AltaUsusario.Ejecutar(usuario);
-            var usuarioCreado = ServicioUsuarios.Agregar(usuario);
-            Sesion.IniciarSesion(usuarioCreado);
+            Sesion.IniciarSesion(usuario);
             Nav.NavigateTo("/");
         }
         catch (Exception ex)
