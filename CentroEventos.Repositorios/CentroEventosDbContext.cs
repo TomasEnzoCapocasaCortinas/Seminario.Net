@@ -49,6 +49,14 @@ public class CentroEventosDbContext : DbContext
                           .Select(p => Enum.Parse<Permiso>(p))
                           .ToList()
                 );
+            entidad.Property(u => u.PermisosL)
+                .HasColumnName("Permisos")
+                .HasMaxLength(500)
+                .IsRequired()
+                .HasDefaultValue("");
+            entidad.Property(u => u.FechaCreacion)
+                   .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                   .ValueGeneratedOnAdd();
         });
 
         // --- Evento Deportivo ---
