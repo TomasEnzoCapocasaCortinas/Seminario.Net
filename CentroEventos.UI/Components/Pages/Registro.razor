@@ -6,6 +6,7 @@
 @inject AltaUsusario AltaUsusario
 @inject IRepositorioUsuario ServicioUsuarios
 @inject ServicioSesionUsuario Sesion
+@inject ServicioUsuario SUsuario
 
 <h3>Registro de nuevo usuario</h3>
 
@@ -18,30 +19,25 @@
         <InputText placeholder="Nombre" id="nombre" class="form-control" @bind-Value="usuario.Nombre" />
         <ValidationMessage For="@(() => usuario.Nombre)" />
     </div>
-
+    <br>
     <div class="form-group">
         <label for="apellido">Apellido:</label>
         <InputText id="apellido" @bind-Value="usuario.Apellido" class="form-control" />
         <ValidationMessage For="@(() => usuario.Apellido)" />
     </div>
-
+    <br>
     <div class="form-group">
         <label for="email">Email:</label>
         <InputText id="email" @bind-Value="usuario.Email" class="form-control" />
         <ValidationMessage For="@(() => usuario.Email)" />
     </div>
-
+    <br>
     <div class="form-group">
         <label for="password">Contraseña:</label>
         <InputText id="password" @bind-Value="usuario.Contrasenia" type="password" class="form-control" />
         <ValidationMessage For="@(() => usuario.Contrasenia)" />
     </div>
-
-    <div class="form-group"> *
-        <label for="confirmPassword">Confirmar contraseña:</label>
-        <InputText id="confirmPassword" @bind-Value="confirmar" type="password" class="form-control" />
-        <small class="text-danger">@error</small>
-    </div>
+    <br>
     <div class="d-flex justify-content-center align-item-center">
         <button type="submit" class="btn btn-primary">Registrarse</button>
     </div>
@@ -54,22 +50,17 @@
 
 @code {
     private Usuario usuario = new();
-    private string contraseña = string.Empty;
-    private string confirmar = string.Empty;
+    private string contrasenia = string.Empty;
     private string? error;
 
     private void Registrar()
     {
         error = null;
-
-        if (contraseña != confirmar)
-        {
-            error = "Las contraseñas no coinciden.";
-            return;
-        }
-        usuario.Contrasenia = contraseña;
+        
         try
         {
+            usuario.Contrasenia = contrasenia;
+            //SUsuario.Registrar(usuario);
             AltaUsusario.Ejecutar(usuario);
             Sesion.IniciarSesion(usuario);
             Nav.NavigateTo("/");

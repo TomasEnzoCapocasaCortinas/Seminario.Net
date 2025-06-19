@@ -20,7 +20,7 @@ public class ServicioUsuario
     }
 
     // Registrar nuevo usuario
-    public ResultadoOperacion Registrar(Usuario usuario, string confirmarContrasenia)
+    public ResultadoOperacion Registrar(Usuario usuario)
     {
         try
         {
@@ -30,9 +30,6 @@ public class ServicioUsuario
 
             if (string.IsNullOrWhiteSpace(usuario.Contrasenia))
                 return ResultadoOperacion.Fallido("La contraseña no puede estar vacía");
-
-            if (usuario.Contrasenia != confirmarContrasenia)
-                return ResultadoOperacion.Fallido("Las contraseñas no coinciden");
 
             if (_repositorioUsuario.ObtenerPorEmail(usuario.Email) != null)
                 return ResultadoOperacion.Fallido("Ya existe un usuario con este email");
