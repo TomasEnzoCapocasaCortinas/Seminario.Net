@@ -1,0 +1,130 @@
+@page "/crearreserva"
+@rendermode InteractiveServer
+@using System;
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.CasosDeUso
+@using CentroEventos.Aplicacion.Enumerativos
+@inject IRepositorioEventoDeportivo RepositorioEventos
+@inject IRepositorioReserva RepositorioReservas
+@inject ServicioSesionUsuario Sesion
+@inject NavigationManager Nav
+
+@if (Sesion.EstaAutenticado())
+{
+<h3>Crear Reserva</h3>
+
+    <div class="mb-3">
+        <label for="eventoId">Buscar evento por ID:</label>
+        <input placeholder="Id del evento" @bind="eventoIdBuscado" class="form-control">
+        <button class="btn btn-primary mt-1" @onclick="BuscarEventoPorId">Buscar</button>
+    </div>
+
+    @if (eventoSeleccionado != null)
+    {
+        <h5>Evento Seleccionado:</h5>
+        <div class="card p-2 mb-3">
+            <p><strong>@eventoSeleccionado.Nombre</strong></p>
+            <p>@eventoSeleccionado.Descripcion</p>
+            <p>@eventoSeleccionado.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</p>
+            <p>Cupo: @eventoSeleccionado.CupoMaximo</p>
+            <button class="btn btn-success" @onclick="ReservarEvento">Reservar</button>
+        </div>
+    }
+
+    <h5>Nuestros próximos eventos:</h5>
+    @if (eventosDisponibles == null)
+    {
+        <p>No hay eventos disponibles actualmente.</p>
+    }
+    else
+    {
+        <ul class="list-group">
+            @foreach (var evento in eventosDisponibles)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>
+                        <strong>@evento.Nombre</strong> - @evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")
+                    </span>
+                    <button class="btn btn-outline-primary btn-sm" @onclick="@(() => SeleccionarEvento(evento))">Seleccionar</button>
+                </li>
+            }
+        </ul>
+    }
+
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        <div class="alert alert-info mt-3">@mensaje</div>
+    }
+}
+
+@code {
+    private Usuario? usuarioActual;
+    private int eventoIdBuscado;
+    private EventoDeportivo? eventoSeleccionado;
+    private List<EventoDeportivo>? eventosDisponibles;
+    private string? mensaje;
+
+    protected override void OnInitialized()
+    {
+        usuarioActual = Sesion.ObtenerUsuarioActual();
+        if (usuarioActual != null)
+        {
+            eventosDisponibles = RepositorioEventos.ObtenerTodos();
+        }
+    }
+
+    private void BuscarEventoPorId()
+    {
+        mensaje = null;
+        eventoSeleccionado = RepositorioEventos.ObtenerPorId(eventoIdBuscado);
+
+        if (eventoSeleccionado == null)
+        {
+            mensaje = "No se encontró ningún evento con ese ID.";
+        }
+    }
+
+    private void SeleccionarEvento(EventoDeportivo ev)
+    {
+        eventoSeleccionado = ev;
+        mensaje = null;
+    }
+
+    private void ReservarEvento()
+    {
+        mensaje = null;
+
+        if (eventoSeleccionado == null)
+        {
+            mensaje = "Debes seleccionar un evento.";
+            return;
+        }
+
+        if (RepositorioReservas.ExisteReservaParaPersonaYEvento(usuarioActual.Id, eventoSeleccionado.ID))
+        {
+            mensaje = "Ya estás inscripta en este evento.";
+            return;
+        }
+
+        // Validar cupo disponible
+        var reservas = RepositorioReservas.ObtenerReservasPorEvento(eventoSeleccionado.ID).Count;
+        if (reservas >= eventoSeleccionado.CupoMaximo)
+        {
+            mensaje = "Este evento ya no tiene cupo disponible.";
+            return;
+        }
+
+        var nuevaReserva = new Reserva
+        {
+            PersonaId = usuarioActual.Id,
+            EventoDeportivoId = eventoSeleccionado.ID,
+            FechaAltaReserva = DateTime.Now,
+            EstadoAsistencia = EstadoAsistencia.Pendiente
+        };
+
+        RepositorioReservas.Agregar(nuevaReserva);
+        mensaje = "Reserva realizada correctamente.";
+        eventoSeleccionado = null;
+        eventosDisponibles = RepositorioEventos.ObtenerTodos();
+    }
+}

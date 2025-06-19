@@ -1,25 +1,34 @@
-﻿@page "/EventoDeportivo"
+﻿@page "/editarevento"
 @rendermode InteractiveServer
 @using System;
 @using CentroEventos.Aplicacion.Entidades;
 @using CentroEventos.Aplicacion.CasosDeUso;
-@inject AltaEventoDeportivo altaEventoDeportivo
+@inject ModificarEventoDeportivo Modificar
+
+
+<h1>Editar Evento</h1>
+
 <input placeholder="Nombre del evento" @bind="_evento.Nombre" />
+<br>
 <input placeholder="Descripción del evento" @bind="_evento.Descripcion" />
+<br>
 <!-- <input placeholder="Fecha de inicio" type="date" @bind="_evento.FechaInicio" /> ARREGLAR TEMA INGRESO DE FECHA-->
 <input placeholder="Duración (en horas)" @bind="_evento.DuracionHoras" />
+<br>
 <input placeholder="Cupo máximo" @bind="_evento.CupoMaximo" />
+<br>
 <input placeholder="Responsable ID" type="number" @bind="_evento.ResponsableID  " />
-<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+<br>
+<button class="btn btn-primary" @onclick="Guardar">Guardar</button>
 @code {
     EventoDeportivo _evento = new EventoDeportivo
     {
         FechaHoraInicio = DateTime.Now // Asignar la fecha y hora actual como valor por defecto
     };
 
-    void Aceptar()
+    void Guardar()
     {
-        altaEventoDeportivo.Ejecutar(_evento,1); //HACER QUE EL ID SEA AUTOINCREMENTAL
+        Modificar.Ejecutar(_evento);
         _evento = new EventoDeportivo(); // Reiniciar el formulario
     }
 }

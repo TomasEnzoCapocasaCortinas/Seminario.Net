@@ -34,7 +34,7 @@ else
                     <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evento.DuracionHoras hs</td>
                     <td>@reserva.EstadoAsistencia</td>
-                    <td>
+                    @* <td>
                         @if (evento.FechaHoraInicio > DateTime.Now)
                         {
                             <button class="btn btn-danger btn-sm" @onclick="() => CancelarReserva(reserva.Id)">Cancelar</button>
@@ -44,7 +44,7 @@ else
                             <button class="btn btn-success btn-sm" @onclick="() => MarcarAsistencia(reserva.Id, EstadoAsistencia.Presente)">Presente</button>
                             <button class="btn btn-warning btn-sm" @onclick="() => MarcarAsistencia(reserva.Id, EstadoAsistencia.Ausente)">Ausente</button>
                         }
-                    </td>
+                    </td> *@
                 </tr>
             }
         </tbody>
@@ -63,12 +63,7 @@ else
 
         if (usuarioActual != null)
         {
-            CargarReservas();
-        }
-        
-    }
-    private void CargarReservas(){
-        misReservas = RepositorioReservas.ObtenerReservasPorPersona(usuarioActual.Id);
+            misReservas = RepositorioReservas.ObtenerReservasPorPersona(usuarioActual.Id);
 
             var eventosIds = misReservas.Select(r => r.EventoDeportivoId).Distinct();
             foreach (var id in eventosIds)
@@ -77,8 +72,10 @@ else
                 if (evento != null)
                     eventosPorId[id] = evento;
             }
+        }
+        
     }
-    private void CancelarReserva(int reservaId)
+    @* private void CancelarReserva(int reservaId)
     {
         RepositorioReservas.Eliminar(reservaId);
         mensaje = "Reserva cancelada correctamente.";
@@ -96,6 +93,6 @@ else
             CargarReservas();
             StateHasChanged();
         }
-    }
+    } *@
 }
 

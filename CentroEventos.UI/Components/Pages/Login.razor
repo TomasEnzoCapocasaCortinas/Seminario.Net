@@ -31,6 +31,7 @@
             mensajeError = "Correo o contraseña inválidos.";
             return;
         }
+        Sesion.IniciarSesion(usuarioInput);
         Navigation.NavigateTo("/main");
     }
 }
