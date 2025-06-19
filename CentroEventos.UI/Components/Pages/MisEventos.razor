@@ -1,9 +1,18 @@
-﻿@page "/listado-eventos-deportivos"
+﻿@page "/miseventos"
 @using CentroEventos.Aplicacion.Entidades;
 @using CentroEventos.Aplicacion.CasosDeUso;
 @rendermode InteractiveServer
 @inject EliminarEventoDeportivo eliminarEventoDeportivo
 @inject ObtenerTodosEventosDeportivos obtenerEventosDeportivos
+
+<PageTitle>Mis Eventos</PageTitle>
+
+<h1>Mis Eventos</h1>
+
+@if (miseventos == null)
+{
+    <p><em>No Tenés ninguna reserva.</em></p>
+}
 <table class="table">
    <thead>
        <tr>
@@ -18,18 +27,18 @@
        </tr>
    </thead>
    <tbody>
-       @foreach (var eve in _lista)
+       @foreach (var evento in miseventos)
        {
            <tr>
-               <td>@eve.ID</td>
-               <td>@eve.Nombre</td>
-               <td>@eve.Descripcion</td>
+               <td>@evento.ID</td>
+               <td>@evento.Nombre</td>
+               <td>@evento.Descripcion</td>
                <!--Agregar Otro Campos-->
                <td> 
                 <button class="btn btn-primary">
                     Editar
                 </button>
-                <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(eve)">
+                <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(evento)">
                     Eliminar
                 </button>
                </td>
@@ -38,10 +47,10 @@
    </tbody>
 </table>
 @code {
-    List<EventoDeportivo> _lista = new List<EventoDeportivo>();
+    List<EventoDeportivo> miseventos = new List<EventoDeportivo>();
     protected override void OnInitialized()
     {
-        _lista = obtenerEventosDeportivos.Ejecutar().ToList(); //Porque hace falta añadir el toList?
+        miseventos = obtenerEventosDeportivos.Ejecutar().ToList(); //Porque hace falta añadir el toList?
     }
     DialogoConfirmacion dialogo=null!;
     EventoDeportivo? _EventoParaEliminar = null;
@@ -57,7 +66,7 @@
         if (_EventoParaEliminar != null)
         {
             eliminarEventoDeportivo.Ejecutar(_EventoParaEliminar.ID);
-            _lista= obtenerEventosDeportivos.Ejecutar().ToList();
+            miseventos= obtenerEventosDeportivos.Ejecutar().ToList();
         }
 
     }
