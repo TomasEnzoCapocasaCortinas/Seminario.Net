@@ -1,4 +1,6 @@
+@page "/main"
 @inject ServicioSesionUsuario Sesion
+@inject NavigationManager Navigation
 
 @if (Sesion.EstaAutenticado())
 {
@@ -10,3 +12,4 @@
     </div>
     
 }
+<p>Iniciaste sesion tuki :)</p>
