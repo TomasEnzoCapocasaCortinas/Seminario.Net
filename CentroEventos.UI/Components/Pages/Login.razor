@@ -19,21 +19,23 @@
 <button class="btn btn-primary" @onclick="IniciarSesion">Iniciar Sesión</button>
 
 
+
 @code {
     private Usuario usuarioInput = new();
     private string mensajeError = "";
 
+    private ResultadoOperacion resultadoOperacion = new();
+
     private void IniciarSesion()
     {
-        ServicioUsuarios.IniciarSesion(usuarioInput.Email, usuarioInput.Contrasenia);
-        var usuario = Usuarios.ObtenerPorEmail(usuarioInput.Email);
+        var resultadoOperacion = ServicioUsuarios.IniciarSesion(usuarioInput.Email, usuarioInput.Contrasenia);
         Console.WriteLine("Boton");
-        if (usuario is null)
+        if (!resultadoOperacion.Exito)
         {
             mensajeError = "Correo o contraseña inválidos.";
             return;
         }
-        Sesion.IniciarSesion(usuario);
-        Navigation.NavigateTo("/main");
+        Sesion.IniciarSesion(usuarioInput);
+        Navigation.NavigateTo("", forceLoad: true);
     }
 }

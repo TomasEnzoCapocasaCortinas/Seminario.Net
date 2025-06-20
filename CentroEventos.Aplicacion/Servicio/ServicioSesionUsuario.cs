@@ -1,9 +1,18 @@
 using CentroEventos.Aplicacion.Entidades;
 using System;
+
 public class ServicioSesionUsuario
 {
-    private Usuario? _usuarioActual;
-    
+    private static Usuario? _usuarioActual;
+
+    public event Action? OnChange;
+
+    private void NotificarCambio()
+    {
+    Console.WriteLine(">> Notificando cambio de sesión");
+    OnChange?.Invoke();
+    }
+
     public Usuario ObtenerUsuarioActual()
     {
         if (_usuarioActual == null)
@@ -16,13 +25,15 @@ public class ServicioSesionUsuario
     public void IniciarSesion(Usuario usuario)
     {
         _usuarioActual = usuario;
+        NotificarCambio();
     }
 
     public void CerrarSesion()
     {
         _usuarioActual = null;
+        NotificarCambio();
     }
-    
+
     public bool EstaAutenticado()
     {
         return _usuarioActual != null;
