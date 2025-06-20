@@ -1,0 +1,27 @@
+@page "/logout"
+
+@rendermode InteractiveServer
+@inject NavigationManager Nav
+@inject ServicioSesionUsuario Sesion
+
+<h3>¿Seguro que quieres salir?</h3>
+
+
+<button @onclick="CerrarSesion" class="btn btn-danger me-2">Sí, salir</button>
+    
+<button @onclick="Cancelar" class="btn btn-secondary">Cancelar</button>
+
+
+@code {
+    void CerrarSesion()
+    {
+        Console.WriteLine("Cerrando sesión del usuario");
+        Sesion.CerrarSesion(); // Cierra la sesión del usuario
+        Nav.NavigateTo("/login"); // Recarga la página
+    }
+    void Cancelar()
+    {
+        Console.WriteLine("Cancelando cierre de sesión");
+        Nav.NavigateTo("/main"); // Vuelve al inicio
+    }
+}
