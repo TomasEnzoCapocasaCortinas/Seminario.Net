@@ -1,0 +1,85 @@
+@page "/modificar-persona"
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.Interfaces
+@rendermode InteractiveServer
+@inject IRepositorioPersona ServicioPersonas
+@inject NavigationManager Nav
+
+<h3>Modificar Persona</h3>
+
+<!-- Paso 1: Buscar por ID -->
+<div class="mb-4">
+    <input placeholder="Ingrese ID" 
+           @bind="idABuscar" 
+           class="form-control" 
+           type="number">
+    <button class="btn btn-primary mt-2" @onclick="BuscarPersona">
+        Buscar
+    </button>
+</div>
+
+<!-- Paso 2: Formulario -->
+@if (persona != null)
+{
+    <div>
+        <input placeholder="DNI" @bind="persona.Dni" class="form-control mb-2">
+        <input placeholder="Nombre" @bind="persona.Nombre" class="form-control mb-2">
+        <input placeholder="Apellido" @bind="persona.Apellido" class="form-control mb-2">
+        <input placeholder="Email" @bind="persona.Email" class="form-control mb-2">
+        <input placeholder="Tel" @bind="persona.Tel" class="form-control mb-2"> <!-- Campo corregido -->
+        
+        <button class="btn btn-success" @onclick="Guardar">
+            Guardar
+        </button>
+        <button class="btn btn-secondary ms-2" @onclick="Cancelar">
+            Cancelar
+        </button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(mensajeError))
+{
+    <p class="text-danger mt-2">@mensajeError</p>
+}
+
+@code {
+    private int idABuscar;
+    private Persona? persona;
+    private string? mensajeError;
+
+    private void BuscarPersona()
+    {
+        try 
+        {
+            persona = ServicioPersonas.ObtenerPorId(idABuscar);
+            mensajeError = persona == null ? "No se encontró el ID" : "";
+        }
+        catch (Exception ex)
+        {
+            mensajeError = "Error al buscar: " + ex.Message;
+        }
+    }
+
+    private void Guardar()
+    {
+        try 
+        {
+            if (persona == null)
+            {
+                mensajeError = "Debe buscar una persona primero.";
+                return;
+            }
+            ServicioPersonas.Actualizar(persona);
+            Nav.NavigateTo("/listado-personas");
+        }
+        catch (Exception ex)
+        {
+            mensajeError = "Error al guardar: " + ex.Message;
+        }
+    }
+
+    private void Cancelar()
+    {
+        Nav.NavigateTo("/listar-personas");
+    }
+}

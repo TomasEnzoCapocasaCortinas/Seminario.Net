@@ -1,0 +1,56 @@
+@page "/crear-persona"
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.Interfaces
+@rendermode InteractiveServer
+@inject NavigationManager Nav
+@inject IRepositorioPersona ServicioPersonas
+
+<h3>Registro de nueva persona</h3>
+
+<input placeholder="DNI" @bind="persona.Dni" class="form-control">
+<br>
+<br>
+<input placeholder="Nombre" @bind="persona.Nombre" class="form-control">
+<br>
+<br>
+<input placeholder="Apellido" @bind="persona.Apellido" class="form-control">
+<br>
+<br>
+<input placeholder="Email" @bind="persona.Email" class="form-control">
+<br>
+<br>
+<input placeholder="Teléfono" @bind="persona.Tel" class="form-control">
+<br>
+<br>
+<button class="btn btn-primary" @onclick="Guardar">Guardar</button>
+<button class="btn btn-secondary ms-2" @onclick="Cancelar">Cancelar</button>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <p style="color:red">@error</p>
+}
+
+@code {
+    private Persona persona = new();
+    private string? error;
+
+    void Guardar()
+    {
+        error = null;
+        try
+        {
+            
+            ServicioPersonas.Agregar(persona);
+            Nav.NavigateTo("/listado-personas");
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    void Cancelar()
+    {
+        Nav.NavigateTo("/main");
+    }
+}
