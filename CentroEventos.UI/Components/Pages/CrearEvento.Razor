@@ -1,8 +1,65 @@
 @page "/crearevento"
 @rendermode InteractiveServer
 @using System;
-@using CentroEventos.Aplicacion.Entidades;
-@using CentroEventos.Aplicacion.CasosDeUso;
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.CasosDeUso
 @inject AltaEventoDeportivo AltaEvento
+@inject IRepositorioEventoDeportivo RepositorioEventos
+@inject IRepositorioReserva RepositorioReservas
+@inject ServicioSesionUsuario Sesion
+@inject NavigationManager Nav
+
+<PageTitle>Crear Evento</PageTitle>
 
 <h1>Crear Evento</h1>
+
+
+<div class="mb-3">
+    <label>Nombre del evento</label>
+    <input placeholder="Nombre" @bind="eventoN.Nombre" class="form-control">
+</div>
+
+<div class="mb-3">
+    <label>Descripción:</label>
+    <input placeholder="Descripcion" @bind="eventoN.Descripcion" class="form-control">
+</div>
+
+<div class="mb-3">
+    <label>Fecha y Hora de Inicio:</label>
+    <inputDate placeholder="Fecha" @bind="eventoN.FechaHoraInicio" class="form-control">
+    <inputTime placeholder="Hora" @bind="eventoN.FechaHoraInicio" class="form-control">
+</div>
+
+<div class="mb-3">
+    <label>Duración (horas):</label>
+    <input placeholder="Duracion" @bind="eventoN.DuracionHoras" class="form-control">
+</div>
+
+<div class="mb-3">
+    <label>Cupo Máximo:</label>
+    <input placeholder="Cupo" @bind="eventoN.CupoMaximo" class="form-control">
+</div>
+
+<div class="mb-3">
+    <label>ID del Responsable:</label>
+    <input placeholder="ID" @bind="eventoN.ResponsableID" class="form-control">
+</div>
+<div>
+    <button class="btn btn-primary" type="submit" @onclick="CrearEvento">Crear Evento</button>
+</div>
+@if (mensaje != null)
+{
+    <div class="alert alert-success mt-3">@mensaje</div>
+}
+
+@code {
+    private EventoDeportivo eventoN = new EventoDeportivo();
+    private string? mensaje;
+
+    private void CrearEvento()
+    {
+        eventoN
+        mensaje = $"Evento '{eventoN.Nombre}' creado exitosamente!";
+        
+    }
+}

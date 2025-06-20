@@ -33,16 +33,15 @@
 
 @code {
     private Usuario usuario = new();
-    //private string contrasenia = string.Empty;
     private string? error;
 
     void Registrar()
     {
         error = null;
-        Console.WriteLine("hola: " + usuario.Contrasenia);
-        Console.WriteLine("hola2: " + usuario.Email);
-
-        
+        Console.WriteLine("Datos ingresados:");
+        Console.WriteLine($"Nombre: {usuario.Nombre}");
+        Console.WriteLine($"Apellido: {usuario.Apellido}");
+        Console.WriteLine($"Email: {usuario.Email}");
         try
         {
             AltaUsuario.Ejecutar(usuario);

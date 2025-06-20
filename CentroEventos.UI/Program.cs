@@ -18,7 +18,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddScoped<ServicioSesionUsuario>();
-builder.Services.AddBlazoredLocalStorage();
+
 //Agregamos servicios al contenedor DI
 //Trabsient: se crea una nueva instancia cada vez que se inyecta
 builder.Services.AddTransient<AltaEventoDeportivo>();

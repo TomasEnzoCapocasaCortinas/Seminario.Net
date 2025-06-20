@@ -3,6 +3,7 @@
 @using CentroEventos.Aplicacion.Servicio
 @using CentroEventos.Aplicacion.Entidades
 @rendermode InteractiveServer
+@inject IRepositorioUsuario Usuarios
 @inject ServicioUsuario ServicioUsuarios
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Navigation
@@ -24,14 +25,15 @@
 
     private void IniciarSesion()
     {
-        var usuario = ServicioUsuarios.IniciarSesion(usuarioInput.Email, usuarioInput.Contrasenia);
+        ServicioUsuarios.IniciarSesion(usuarioInput.Email, usuarioInput.Contrasenia);
+        var usuario = Usuarios.ObtenerPorEmail(usuarioInput.Email);
         Console.WriteLine("Boton");
         if (usuario is null)
         {
             mensajeError = "Correo o contraseña inválidos.";
             return;
         }
-        Sesion.IniciarSesion(usuarioInput);
+        Sesion.IniciarSesion(usuario);
         Navigation.NavigateTo("/main");
     }
 }
