@@ -51,6 +51,9 @@ builder.Services.AddScoped<PersonaValidador>();
 builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacion>();
 builder.Services.AddScoped<ServicioSesionUsuario, ServicioSesionUsuario>();
 builder.Services.AddScoped<ServicioUsuario, ServicioUsuario>();
+builder.Services.AddScoped<ServicioUsuario, ServicioUsuario>();
+
+
 
 var app = builder.Build();
 

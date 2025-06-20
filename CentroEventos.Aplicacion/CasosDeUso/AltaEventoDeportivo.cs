@@ -12,6 +12,7 @@ public class AltaEventoDeportivo
     private readonly IRepositorioPersona repoPersona;
     private readonly ValidadorEventoDeportivo _validador;
 
+
     public AltaEventoDeportivo(IRepositorioEventoDeportivo repositorio, IRepositorioPersona repoP)
     {
         _repositorio = repositorio;

@@ -3,62 +3,79 @@
 @using System;
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.CasosDeUso
+@using CentroEventos.Aplicacion.Enumerativos
 @inject AltaEventoDeportivo AltaEvento
 @inject IRepositorioEventoDeportivo RepositorioEventos
 @inject IRepositorioReserva RepositorioReservas
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
 
+
 <PageTitle>Crear Evento</PageTitle>
 
 <h1>Crear Evento</h1>
 
-
-<div class="mb-3">
-    <label>Nombre del evento</label>
-    <input placeholder="Nombre" @bind="eventoN.Nombre" class="form-control">
-</div>
-
-<div class="mb-3">
-    <label>Descripción:</label>
-    <input placeholder="Descripcion" @bind="eventoN.Descripcion" class="form-control">
-</div>
-
-<div class="mb-3">
-    <label>Fecha y Hora de Inicio:</label>
-    @* <inputDate placeholder="Fecha" @bind="eventoN.FechaHoraInicio" class="form-control">
-    <inputTime placeholder="Hora" @bind="eventoN.FechaHoraInicio" class="form-control"> *@
-</div>
-
-<div class="mb-3">
-    <label>Duración (horas):</label>
-    <input placeholder="Duracion" @bind="eventoN.DuracionHoras" class="form-control">
-</div>
-
-<div class="mb-3">
-    <label>Cupo Máximo:</label>
-    <input placeholder="Cupo" @bind="eventoN.CupoMaximo" class="form-control">
-</div>
-
-<div class="mb-3">
-    <label>ID del Responsable:</label>
-    <input placeholder="ID" @bind="eventoN.ResponsableID" class="form-control">
-</div>
-<div>
-    <button class="btn btn-primary" type="submit" @onclick="CrearEventoNuevo">Crear Evento</button>
-</div>
-@if (mensaje != null)
+@if (tienePermisos)
 {
-    <div class="alert alert-success mt-3">@mensaje</div>
+    <div class="mb-3">
+        <label>Nombre del evento</label>
+        <input placeholder="Nombre" @bind="eventoN.Nombre" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Descripción:</label>
+        <input placeholder="Descripcion" @bind="eventoN.Descripcion" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Fecha y Hora de Inicio:</label>
+        @* <inputDate placeholder="Fecha" @bind="eventoN.FechaHoraInicio" class="form-control">
+        <inputTime placeholder="Hora" @bind="eventoN.FechaHoraInicio" class="form-control"> *@
+    </div>
+
+    <div class="mb-3">
+        <label>Duración (horas):</label>
+        <input placeholder="Duracion" @bind="eventoN.DuracionHoras" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Cupo Máximo:</label>
+        <input placeholder="Cupo" @bind="eventoN.CupoMaximo" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>ID del Responsable:</label>
+        <input placeholder="ID" @bind="eventoN.ResponsableID" class="form-control">
+    </div>
+    <div>
+        <button class="btn btn-primary" type="submit" @onclick="CrearEventoNuevo">Crear Evento</button>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger mt-3">@mensaje</div>
 }
 
 @code {
     private EventoDeportivo eventoN = new EventoDeportivo();
     private string? mensaje;
+    private bool tienePermisos = false;
+    private Usuario? usuarioActual;
 
+    protected override void OnInitialized()
+    {
+        usuarioActual = Sesion.ObtenerUsuarioActual();
+        tienePermisos = usuarioActual.Permisos.Contains(Permiso.EventoAlta);
+
+        if (!tienePermisos)
+        {
+            mensaje = "No tienes permisos para crear un evento.";
+        }
+    }
     private void CrearEventoNuevo()
     {
-        mensaje = $"Evento '{eventoN.Nombre}' creado exitosamente!";
-        
+            AltaEvento.Ejecutar(eventoN,eventoN.ResponsableID);
+            mensaje = $"Evento '{eventoN.Nombre}' creado exitosamente!";
+       
     }
 }

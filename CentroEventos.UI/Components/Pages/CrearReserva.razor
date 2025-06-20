@@ -13,6 +13,7 @@
 {
 <h3>Crear Reserva</h3>
 
+@if (tienePermisos){
     <div class="mb-3">
         <label for="eventoId">Buscar evento por ID:</label>
         <input placeholder="Id del evento" @bind="eventoIdBuscado" class="form-control">
@@ -50,12 +51,17 @@
             }
         </ul>
     }
-
     @if (!string.IsNullOrEmpty(mensaje))
     {
         <div class="alert alert-info mt-3">@mensaje</div>
     }
 }
+else
+{
+    <div class="alert alert-danger mt-3">@mensaje</div>
+}
+    
+
 
 @code {
     private Usuario? usuarioActual;
