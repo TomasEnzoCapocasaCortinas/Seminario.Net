@@ -4,17 +4,16 @@
 
 <div class="page">
     @if (Sesion.EstaAutenticado()){
-        <div class="sidebar">
-            <NavMenu />
-        </div>
+    <div class="sidebar">
+        <NavMenu />
+    </div>
     }
     <main>
         
         @if (Sesion.EstaAutenticado())
         {
             <div class="top-row px-4 justify-content-end d-flex">
-                <span class="me-2">👋 Hola, @Sesion.ObtenerUsuarioActual().Nombre</span>
-                <button class="btn btn-outline-danger btn-sm" @onclick="CerrarSesion">Cerrar sesión</button>
+                <span class="me-2">👋 Hola, @Sesion.ObtenerUsuarioActual().Nombre @Sesion.ObtenerUsuarioActual().Apellido</span>
             </div>
         }
 
@@ -30,11 +29,4 @@
     <a class="dismiss">🗙</a>
 </div>
 
-@code {
-    private void CerrarSesion()
-    {
-        Console.WriteLine("Boton");
-        Sesion.CerrarSesion();
-        Navigation.NavigateTo("/");
-    }
-}
+

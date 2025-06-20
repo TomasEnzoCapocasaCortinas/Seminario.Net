@@ -38,6 +38,10 @@ public class PersonaRepositorio : IRepositorioPersona
     }
     public void Actualizar(Persona p)
     {
+        if (p == null)
+        {
+            throw new ArgumentNullException(nameof(p), "La persona no puede ser nula.");
+        }
         dataBase.Personas.Update(p);
         dataBase.SaveChanges();
     }

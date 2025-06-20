@@ -1,0 +1,106 @@
+@page "/listado-personas"
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.Interfaces
+@rendermode InteractiveServer
+@inject IRepositorioPersona ServicioPersonas
+@inject NavigationManager Nav
+
+<h3>Listado de Personas</h3>
+
+<button class="btn btn-success mb-3" @onclick="NuevaPersona">
+    <span class="oi oi-plus"></span> Nueva Persona
+</button>
+
+@if (personas == null)
+{
+    <p>Cargando...</p>
+}
+else if (!personas.Any())
+{
+    <p>No hay personas registradas</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var persona in personas)
+            {
+                <tr>
+                    <td>@persona.Dni</td>
+                    <td>@persona.Nombre</td>
+                    <td>@persona.Apellido</td>
+                    <td>@persona.Email</td>
+                    <td>@persona.Tel</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" @onclick="@(() => Editar(persona.Id))">
+                            <span class="oi oi-pencil"></span>
+                        </button>
+                        <button class="btn btn-sm btn-danger ms-1" @onclick="@(() => Eliminar(persona.Id))">
+                            <span class="oi oi-trash"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger">@error</div>
+}
+
+@code {
+    private List<Persona>? personas;
+    private string? error;
+
+    protected override void OnInitialized()
+    {
+        CargarPersonas();
+    }
+
+    private void CargarPersonas()
+    {
+        try
+        {
+            personas = ServicioPersonas.ObtenerTodas().ToList();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    private void NuevaPersona()
+    {
+        Nav.NavigateTo("/crear-persona");
+    }
+
+    private void Editar(int id)
+    {
+        Nav.NavigateTo($"/editar-persona/{id}");
+    }
+
+    private void Eliminar(int id)
+    {
+        try
+        {
+            ServicioPersonas.Eliminar(id);
+            CargarPersonas(); // Recargar la lista
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}
