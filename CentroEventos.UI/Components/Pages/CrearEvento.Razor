@@ -26,8 +26,8 @@
 
 <div class="mb-3">
     <label>Fecha y Hora de Inicio:</label>
-    <inputDate placeholder="Fecha" @bind="eventoN.FechaHoraInicio" class="form-control">
-    <inputTime placeholder="Hora" @bind="eventoN.FechaHoraInicio" class="form-control">
+    @* <inputDate placeholder="Fecha" @bind="eventoN.FechaHoraInicio" class="form-control">
+    <inputTime placeholder="Hora" @bind="eventoN.FechaHoraInicio" class="form-control"> *@
 </div>
 
 <div class="mb-3">
@@ -45,7 +45,7 @@
     <input placeholder="ID" @bind="eventoN.ResponsableID" class="form-control">
 </div>
 <div>
-    <button class="btn btn-primary" type="submit" @onclick="CrearEvento">Crear Evento</button>
+    <button class="btn btn-primary" type="submit" @onclick="CrearEventoNuevo">Crear Evento</button>
 </div>
 @if (mensaje != null)
 {
@@ -56,9 +56,8 @@
     private EventoDeportivo eventoN = new EventoDeportivo();
     private string? mensaje;
 
-    private void CrearEvento()
+    private void CrearEventoNuevo()
     {
-        eventoN
         mensaje = $"Evento '{eventoN.Nombre}' creado exitosamente!";
         
     }

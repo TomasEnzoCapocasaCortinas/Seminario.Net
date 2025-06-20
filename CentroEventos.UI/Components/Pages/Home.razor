@@ -6,6 +6,7 @@
     <div class="d-flex justify-content-center align-items-center">
         <h1>Bienvenido a Centro Eventos</h1>
     </div>
+@if (!Sesion.EstaAutenticado()){
     <div class="d-flex justify-content-center align-items-center">
         <p>Registrate o iniciá sesión para empezar a usar la plataforma.</p>
     </div>
@@ -18,4 +19,4 @@
             <a class="btn btn-lg lift-on-hover" href="/login">INICIAR SESIÓN</a>
         </div>
     </div>
-
+}
