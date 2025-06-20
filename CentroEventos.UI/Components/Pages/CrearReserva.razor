@@ -11,7 +11,7 @@
 
 @if (Sesion.EstaAutenticado())
 {
-<h3>Crear Reserva</h3>
+<h1>Crear Reserva</h1>
 
 @if (tienePermisos){
     <div class="mb-3">
@@ -60,6 +60,7 @@ else
 {
     <div class="alert alert-danger mt-3">@mensaje</div>
 }
+}
     
 
 
@@ -69,10 +70,16 @@ else
     private EventoDeportivo? eventoSeleccionado;
     private List<EventoDeportivo>? eventosDisponibles;
     private string? mensaje;
+    private bool tienePermisos=false;
 
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
+        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.EventoAlta);
+        if (!tienePermisos)
+        {
+            mensaje = "No tienes permisos para crear un evento.";
+        }
         if (usuarioActual != null)
         {
             eventosDisponibles = RepositorioEventos.ObtenerTodos();

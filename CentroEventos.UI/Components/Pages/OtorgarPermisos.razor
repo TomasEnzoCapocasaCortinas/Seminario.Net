@@ -1,0 +1,100 @@
+@page "/otorgarpermisos"
+@rendermode InteractiveServer
+@using System
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.Enumerativos
+@using CentroEventos.Aplicacion.CasosDeUso
+@inject ServicioSesionUsuario Sesion
+@inject IRepositorioUsuario RepositorioUsuarios
+@inject NavigationManager Nav
+
+<PageTitle>Otorgar Permisos</PageTitle>
+
+<h1>Otorgar Permisos a Usuarios</h1>
+
+@if (!tienePermisos)
+{
+    <div class="alert alert-danger mt-3">No tienes permisos para modificar usuarios.</div>
+}
+else
+{
+    <div class="mb-3">
+        <label>Selecciona un usuario:</label>
+        <select class="form-select" @onchange="SeleccionarUsuario">
+            <option value=""> Seleccionar </option>
+            @foreach (var u in usuarios)
+            {
+                <option value="@u.Id">@u.Nombre @u.Apellido (ID: @u.Id)</option>
+            }
+        </select>
+    </div>
+
+    @if (usuarioSeleccionado != null)
+    {
+        <h5>Permisos actuales de @usuarioSeleccionado.Nombre:</h5>
+        @foreach (Permiso p in Enum.GetValues<Permiso>())
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="@p" 
+                       @bind="@permisosSeleccionados[p]" />
+                <label class="form-check-label" for="@p">@p.ToString()</label>
+            </div>
+        }
+
+        <button class="btn btn-primary mt-3" @onclick="GuardarPermisos">Guardar Cambios</button>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="alert alert-success mt-3">@mensaje</div>
+        }
+    }
+}
+
+@code {
+    private Usuario? usuarioActual;
+    private List<Usuario> usuarios = new();
+    private Usuario? usuarioSeleccionado;
+    private Dictionary<Permiso, bool> permisosSeleccionados = new();
+    private bool tienePermisos = false;
+    private string? mensaje;
+
+    protected override void OnInitialized()
+    {
+        usuarioActual = Sesion.ObtenerUsuarioActual();
+
+        tienePermisos = usuarioActual.Permisos.Contains(Permiso.UsuarioModificacion);
+
+        if (tienePermisos)
+        {
+            usuarios = RepositorioUsuarios.ObtenerTodos();
+        }
+    }
+
+    private void SeleccionarUsuario(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int id))
+        {
+            usuarioSeleccionado = RepositorioUsuarios.ObtenerPorId(id);
+            if (usuarioSeleccionado != null)
+            {
+                permisosSeleccionados = Enum.GetValues<Permiso>()
+                    .ToDictionary(p => p, p => usuarioSeleccionado.Permisos.Contains(p));
+            }
+        }
+        mensaje = null;
+    }
+
+    private void GuardarPermisos()
+    {
+        if (usuarioSeleccionado == null) return;
+
+        usuarioSeleccionado.Permisos = permisosSeleccionados
+            .Where(p => p.Value)
+            .Select(p => p.Key)
+            .ToList();
+
+        RepositorioUsuarios.Modificar(usuarioSeleccionado);
+
+        mensaje = "Permisos actualizados correctamente.";
+    }
+}
