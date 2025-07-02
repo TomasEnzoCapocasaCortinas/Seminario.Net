@@ -5,8 +5,8 @@
 @using CentroEventos.Aplicacion.Entidades
 @rendermode InteractiveServer
 @inject NavigationManager Nav
-@inject AltaUsuario AltaUsuario
-@inject IRepositorioUsuario ServicioUsuarios
+@inject ServicioUsuario ServicioUsuarios
+@inject IRepositorioUsuario Usuarios
 @inject ServicioSesionUsuario Sesion
 
 <h3>Registro de nuevo usuario</h3>
@@ -26,31 +26,27 @@
 <button class="btn btn-primary" @onclick="Registrar">Registrarse</button>
 
 
-@if (!string.IsNullOrEmpty(error))
+@if (!string.IsNullOrEmpty(mensaje))
 {
-    <p style="color:red">@error</p>
+    <p style="color:red">@mensaje</p>
 }
 
 @code {
     private Usuario usuario = new();
-    private string? error;
+    private string? mensaje;
 
     void Registrar()
     {
-        error = null;
-        Console.WriteLine("Datos ingresados:");
-        Console.WriteLine($"Nombre: {usuario.Nombre}");
-        Console.WriteLine($"Apellido: {usuario.Apellido}");
-        Console.WriteLine($"Email: {usuario.Email}");
-        try
+        mensaje = null;
+        var signup = ServicioUsuarios.Registrar(usuario);
+
+        if (!signup.Exito)
         {
-            AltaUsuario.Ejecutar(usuario);
-            Sesion.IniciarSesion(usuario);
-            Nav.NavigateTo("/main");
+            mensaje = signup.Mensaje ?? "Error al registrar.";
+            return;
         }
-        catch (Exception ex)
-        {
-            error = ex.Message;
-        }
+
+        Nav.NavigateTo("/main");
+    }
     }
 }
