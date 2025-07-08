@@ -1,34 +1,105 @@
 ﻿@page "/editarevento"
+@using System
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.CasosDeUso
+@using CentroEventos.Aplicacion.Enumerativos
+@using CentroEventos.Aplicacion.Interfaces
 @rendermode InteractiveServer
-@using System;
-@using CentroEventos.Aplicacion.Entidades;
-@using CentroEventos.Aplicacion.CasosDeUso;
-@inject ModificarEventoDeportivo Modificar
+@inject IRepositorioEventoDeportivo ServicioEventos
+@inject ServicioSesionUsuario Sesion
+@inject NavigationManager Nav
+
+<h1>Modificar Persona</h1>
+@if (tienePermisos){
+<!-- Paso 1: Buscar por ID -->
+    <div class="mb-4">
+        <input placeholder="Ingrese ID" 
+           @bind="idABuscar" 
+           class="form-control" 
+            type="number">
+        <button class="btn btn-primary mt-2" @onclick="BuscarPersona">
+        Buscar
+        </button>
+    </div>
+
+<!-- Paso 2: Formulario -->
+    @if (evento != null)
+    {
+        <div>
+            <input placeholder="DNI" @bind="evento.ID" class="form-control mb-2">
+            <input placeholder="Nombre" @bind="evento.Nombre" class="form-control mb-2">
+            <input placeholder="Apellido" @bind="evento.Descripcion" class="form-control mb-2">
+            <input placeholder="Email" @bind="evento.FechaHoraInicio" class="form-control mb-2">
+            <input placeholder="Tel" @bind="evento.DuracionHoras" class="form-control mb-2">
+            <input placeholder="Tel" @bind="evento.CupoMaximo" class="form-control mb-2">
+            <input placeholder="Tel" @bind="evento.ResponsableID" class="form-control mb-2"> 
 
 
-<h1>Editar Evento</h1>
+            <div class="mt-3 d-flex flex-grow-1">
+                <button class="btn btn-success" @onclick="Guardar">
+                    Guardar
+                </button>
+                <button class="btn btn-secondary ms-2" @onclick="Cancelar">
+                Cancelar
+                </button>
+            </div>
+        </div>
+    }
+}
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <p class="alert alert-danger mt-3">@mensaje</p>
+}
 
-<input placeholder="Nombre del evento" @bind="_evento.Nombre" />
-<br>
-<input placeholder="Descripción del evento" @bind="_evento.Descripcion" />
-<br>
-<!-- <input placeholder="Fecha de inicio" type="date" @bind="_evento.FechaInicio" /> ARREGLAR TEMA INGRESO DE FECHA-->
-<input placeholder="Duración (en horas)" @bind="_evento.DuracionHoras" />
-<br>
-<input placeholder="Cupo máximo" @bind="_evento.CupoMaximo" />
-<br>
-<input placeholder="Responsable ID" type="number" @bind="_evento.ResponsableID  " />
-<br>
-<button class="btn btn-primary" @onclick="Guardar">Guardar</button>
 @code {
-    EventoDeportivo _evento = new EventoDeportivo
-    {
-        FechaHoraInicio = DateTime.Now // Asignar la fecha y hora actual como valor por defecto
-    };
+    private Usuario? usuarioActual;
+    private int idABuscar;
+    private EventoDeportivo? evento;
+    private string? mensaje;
+    private bool tienePermisos=false;
 
-    void Guardar()
+    protected override void OnInitialized()
     {
-        Modificar.Ejecutar(_evento);
-        _evento = new EventoDeportivo(); // Reiniciar el formulario
+        usuarioActual = Sesion.ObtenerUsuarioActual();
+        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.EventoAlta);
+        if (!tienePermisos)
+        {
+            mensaje = "No tienes permisos para modificar una persona.";
+        }
+    }
+    private void BuscarPersona()
+    {
+        try 
+        {
+            evento = ServicioEventos.ObtenerPorId(idABuscar);
+            mensaje = evento == null ? "No se encontró el ID" : "";
+        }
+        catch (Exception ex)
+        {
+            mensaje = "Error al buscar: " + ex.Message;
+        }
+    }
+
+    private void Guardar()
+    {
+        try 
+        {
+            if (evento == null)
+            {
+                mensaje = "Debe buscar una persona primero.";
+                return;
+            }
+            ServicioEventos.Modificar(evento);
+            Nav.NavigateTo("/miseventos");
+        }
+        catch (Exception ex)
+        {
+            mensaje = "Error al guardar: " + ex.Message;
+        }
+    }
+
+    private void Cancelar()
+    {
+        Nav.NavigateTo("/miseventos");
     }
 }

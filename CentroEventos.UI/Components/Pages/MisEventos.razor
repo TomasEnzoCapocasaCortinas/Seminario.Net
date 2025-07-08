@@ -1,80 +1,89 @@
 ﻿@page "/miseventos"
-@using CentroEventos.Aplicacion.Entidades;
-@using CentroEventos.Aplicacion.CasosDeUso;
 @rendermode InteractiveServer
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.CasosDeUso
 @inject ServicioSesionUsuario Sesion
 @inject IRepositorioEventoDeportivo RepositorioEventos
 @inject EliminarEventoDeportivo eliminarEventoDeportivo
 @inject ObtenerTodosEventosDeportivos obtenerEventosDeportivos
-
-<PageTitle>Mis Eventos</PageTitle>
+@inject NavigationManager NavigationManager
 
 <h1>Mis Eventos</h1>
 
-@if (miseventos == null)
+@if (miseventos == null || !miseventos.Any())
 {
-    <p><em>No Tenés ninguna evento.</em></p>
+    <p><em>No tenés ningún evento.</em></p>
 }
-else{
-<table class="table">
-   <thead>
-       <tr>
-           <th>ID</th>
-           <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Fecha y hora</th>
-            <th>Duración</th>
-            <th>Cupo máximo</th>
-       </tr>
-   </thead>
-   <tbody>
-       @foreach (var evento in miseventos)
-       {
+else
+{
+    <table class="table">
+       <thead>
            <tr>
-               <td>@evento.ID</td>
-               <td>@evento.Nombre</td>
-               <td>@evento.Descripcion</td>
-               <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
-               <td>@evento.DuracionHoras hs</td>
-               <td>@evento.CupoMaximo</td>
-               <td> 
-                <button class="btn btn-primary"> Editar</button>
-                <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(evento)">Eliminar</button>
-               </td>
+               <th>ID</th>
+               <th>Nombre</th>
+               <th>Descripción</th>
+               <th>Fecha y hora</th>
+               <th>Duración</th>
+               <th>Cupo máximo</th>
+               <th>Acciones</th>
            </tr>
-       }
-   </tbody>
-</table>
+       </thead>
+       <tbody>
+           @foreach (var evento in miseventos)
+           {
+               <tr>
+                   <td>@evento.ID</td>
+                   <td>@evento.Nombre</td>
+                   <td>@evento.Descripcion</td>
+                   <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                   <td>@evento.DuracionHoras hs</td>
+                   <td>@evento.CupoMaximo</td>
+                   <td> 
+                    <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(evento)">Eliminar</button>
+                   </td>
+               </tr>
+           }
+       </tbody>
+            <button class="btn btn-primary" @onclick=Editar>Editar</button>
+    </table>
 }
+
+<DialogoConfirmacion @ref="dialogo" OnConfirmar="Eliminar" />
+
 @code {
     private Usuario? usuarioActual;
     private List<EventoDeportivo>? miseventos;
+    private DialogoConfirmacion? dialogo;
+    private EventoDeportivo? _EventoParaEliminar;
+
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
-
         if (usuarioActual != null)
         {
             miseventos = obtenerEventosDeportivos.Ejecutar().ToList();
         }
     }
-    DialogoConfirmacion dialogo=null!;
-    EventoDeportivo? _EventoParaEliminar = null;
+
     private void ConfirmarEliminacion(EventoDeportivo eve)
     {
         _EventoParaEliminar = eve;
-       // dialogo.Mensaje = $"¿Está seguro que desea eliminar el evento deportivo {eve.Nombre}?";
-       //Modificique el codigo de DialogoConfirmacion para que reciba el mensaje como parametro
-        dialogo.Mostrar($"¿Está seguro que desea eliminar el evento deportivo {eve.Nombre}?");
+        dialogo?.Mostrar($"¿Está seguro que desea eliminar el evento deportivo {eve.Nombre}?");
     }
+
     private void Eliminar()
     {
         if (_EventoParaEliminar != null)
         {
             eliminarEventoDeportivo.Ejecutar(_EventoParaEliminar.ID);
-            miseventos= obtenerEventosDeportivos.Ejecutar().ToList();
+            miseventos = obtenerEventosDeportivos.Ejecutar().ToList();
         }
-
     }
 
+    private void Editar()
+    {
+        // Aquí podrías implementar la lógica para editar el evento
+        // Por ejemplo, redirigir a una página de edición con el ID del evento
+        NavigationManager.NavigateTo("/editarevento");
+    }
 }

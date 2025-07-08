@@ -12,6 +12,17 @@ public class EventoDeportivo
     public int CupoMaximo { get; set; }
     public int ResponsableID { get; set; } // ID del responsable del evento
 
+    public EventoDeportivo()
+    {
+        this.ID = 0;
+        this.Nombre = string.Empty;
+        this.Descripcion = string.Empty;
+        this.FechaHoraInicio = DateTime.MinValue;
+        this.DuracionHoras = 0.0;
+        this.CupoMaximo = 0;
+        this.ResponsableID = 0;
+    }
+
     public override String ToString()
     {
         return $"Evento {Nombre} ID {ID} Descripcion: {Descripcion} fecha y hora de inicio {FechaHoraInicio:g}. duracion del evento: {DuracionHoras}. cupo maximo de persona:{CupoMaximo} ID del encargado:{ResponsableID}";

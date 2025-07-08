@@ -42,11 +42,8 @@ else
                     <td>@persona.Email</td>
                     <td>@persona.Tel</td>
                     <td>
-                        <button class="btn btn-sm btn-primary" @onclick="@(() => Editar(persona.Id))">
-                            <span class="oi oi-pencil"></span>
-                        </button>
                         <button class="btn btn-sm btn-danger ms-1" @onclick="@(() => Eliminar(persona.Id))">
-                            <span class="oi oi-trash"></span>
+                        Eliminar    <span class="oi oi-trash"></span>
                         </button>
                     </td>
                 </tr>
@@ -88,7 +85,7 @@ else
 
     private void Editar(int id)
     {
-        Nav.NavigateTo($"/editar-persona/{id}");
+        Nav.NavigateTo("/editar-persona");
     }
 
     private void Eliminar(int id)

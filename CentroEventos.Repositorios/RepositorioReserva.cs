@@ -28,7 +28,7 @@ namespace CentroEventos.Repositorios
 
         public void Eliminar(int id)
         {
-            var reserva = dataBase.Reservas.Find(id);
+            var reserva = ObtenerPorId(id);
             if (reserva != null)
             {
                 dataBase.Reservas.Remove(reserva);

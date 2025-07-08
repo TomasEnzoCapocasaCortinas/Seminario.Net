@@ -1,4 +1,5 @@
 @page "/misreservas"
+@rendermode InteractiveServer
 @using CentroEventos.Aplicacion.Interfaces
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.Enumerativos
@@ -34,17 +35,20 @@ else
                     <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evento.DuracionHoras hs</td>
                     <td>@reserva.EstadoAsistencia</td>
-                    @* <td>
                         @if (evento.FechaHoraInicio > DateTime.Now)
                         {
-                            <button class="btn btn-danger btn-sm" @onclick="() => CancelarReserva(reserva.Id)">Cancelar</button>
-                        }
+                            <td> 
+                                <button class="btn btn-danger btn-sm" @onclick="() => CancelarReserva(reserva.Id)">Cancelar</button>
+                            </td>
+                            <label>@reserva.Id</label>
+                        } 
                         else if (reserva.EstadoAsistencia == EstadoAsistencia.Pendiente)
                         {
-                            <button class="btn btn-success btn-sm" @onclick="() => MarcarAsistencia(reserva.Id, EstadoAsistencia.Presente)">Presente</button>
-                            <button class="btn btn-warning btn-sm" @onclick="() => MarcarAsistencia(reserva.Id, EstadoAsistencia.Ausente)">Ausente</button>
+                            <td> 
+                                <button class="btn btn-success btn-sm" @onclick="() => MarcarAsistencia(reserva.Id, EstadoAsistencia.Presente)">Presente</button>
+                                <button class="btn btn-warning btn-sm" @onclick="() => MarcarAsistencia(reserva.Id, EstadoAsistencia.Ausente)">Ausente</button>
+                            </td>
                         }
-                    </td> *@
                 </tr>
             }
         </tbody>
@@ -92,8 +96,8 @@ else
         if (reserva != null)
         {
             reserva.EstadoAsistencia = nuevoEstado;
-            RepositorioReservas.Modificar(reserva);
-            mensaje = $"Asistencia marcada como {nuevoEstado}.";
+#line default
+        mensaje = $"Asistencia marcada como {nuevoEstado}.";
             CargarReservas();
             StateHasChanged();
         }

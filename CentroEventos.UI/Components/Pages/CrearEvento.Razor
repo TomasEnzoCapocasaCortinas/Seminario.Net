@@ -1,54 +1,40 @@
 @page "/crearevento"
 @rendermode InteractiveServer
-@using System;
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.CasosDeUso
 @using CentroEventos.Aplicacion.Enumerativos
 @inject AltaEventoDeportivo AltaEvento
-@inject IRepositorioEventoDeportivo RepositorioEventos
-@inject IRepositorioReserva RepositorioReservas
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
 
-
-<PageTitle>Crear Evento</PageTitle>
-
-<h1>Crear Evento</h1>
+<h1>Crear nuevo evento</h1>
 
 @if (tienePermisos)
 {
-    <div class="mb-3">
-        <label>Nombre del evento</label>
-        <input placeholder="Nombre" @bind="eventoN.Nombre" class="form-control">
-    </div>
+    <div class="mt-3 d-flex flex-column flex-grow-1" style="max-width: 400px;">
+        <input placeholder="Nombre del evento" @bind="eventoN.Nombre" class="form-control mb-2" />
+        <input placeholder="Descripción" @bind="eventoN.Descripcion" class="form-control mb-2" />
+        <br>
+        <label>Fecha de inicio</label>
+        <InputDate @bind-Value="fecha" class="form-control mb-2" />
 
-    <div class="mb-3">
-        <label>Descripción:</label>
-        <input placeholder="Descripcion" @bind="eventoN.Descripcion" class="form-control">
-    </div>
+        <label>Hora de inicio</label>
+        <input type="time" @bind-value="hora" @bind-value:format="HH:mm" class="form-control mb-2" />
 
-    <div class="mb-3">
-        <label>Fecha y Hora de Inicio:</label>
-        @* <inputDate placeholder="Fecha" @bind="eventoN.FechaHoraInicio" class="form-control">
-        <inputTime placeholder="Hora" @bind="eventoN.FechaHoraInicio" class="form-control"> *@
-    </div>
+        <label>Duracion en Horas</label>
+        <input placeholder="Duración (horas)" @bind="eventoN.DuracionHoras" class="form-control mb-2" />
+        <br>
+        <label>Cupo Maximo</label>
+        <input placeholder="Cupo máximo" @bind="eventoN.CupoMaximo" class="form-control mb-2" />
+        <br>
+        <label>Id del responsable</label>
+        <input placeholder="ID del responsable" @bind="eventoN.ResponsableID" class="form-control mb-2" />
+        <br>
 
-    <div class="mb-3">
-        <label>Duración (horas):</label>
-        <input placeholder="Duracion" @bind="eventoN.DuracionHoras" class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label>Cupo Máximo:</label>
-        <input placeholder="Cupo" @bind="eventoN.CupoMaximo" class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label>ID del Responsable:</label>
-        <input placeholder="ID" @bind="eventoN.ResponsableID" class="form-control">
-    </div>
-    <div>
-        <button class="btn btn-primary" type="submit" @onclick="CrearEventoNuevo">Crear Evento</button>
+        <div class="d-flex justify-content-center mt-2">
+            <button class="btn btn-primary" @onclick="CrearEventoNuevo">Guardar</button>
+            <button class="btn btn-secondary ms-2" @onclick="Cancelar">Cancelar</button>
+        </div>
     </div>
 }
 else
@@ -56,8 +42,15 @@ else
     <div class="alert alert-danger mt-3">@mensaje</div>
 }
 
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <p class="alert alert-danger mt-3">@mensaje</p>
+}
+
 @code {
-    private EventoDeportivo eventoN = new EventoDeportivo();
+    private EventoDeportivo eventoN = new();
+    private DateTime fecha = DateTime.Today;
+    private TimeOnly hora = new TimeOnly(12, 0);
     private string? mensaje;
     private bool tienePermisos = false;
     private Usuario? usuarioActual;
@@ -65,7 +58,7 @@ else
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
-        tienePermisos = usuarioActual.Permisos.Contains(Permiso.EventoAlta);
+        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.EventoAlta);
 
         if (!tienePermisos)
         {
@@ -74,8 +67,22 @@ else
     }
     private void CrearEventoNuevo()
     {
-            AltaEvento.Ejecutar(eventoN,eventoN.ResponsableID);
-            mensaje = $"Evento '{eventoN.Nombre}' creado exitosamente!";
-       
+        mensaje = null;
+        try
+        {
+            eventoN.FechaHoraInicio = fecha + hora.ToTimeSpan();
+            AltaEvento.Ejecutar(eventoN, eventoN.ResponsableID);
+            Nav.NavigateTo("/miseventos");
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+        }
+    }
+
+
+    private void Cancelar()
+    {
+        Nav.NavigateTo("/main");
     }
 }
