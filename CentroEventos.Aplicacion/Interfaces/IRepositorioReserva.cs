@@ -12,9 +12,9 @@ namespace CentroEventos.Aplicacion.Interfaces
         List<Reserva> ObtenerTodos();
 
         // Consultas para validaciones
-        bool ExisteReservaParaPersonaYEvento(int personaId, int eventoDeportivoId);
+        bool ExisteReservaParaPersonaYEvento(int usuarioId, int eventoDeportivoId);
         int ContarReservasPorEvento(int eventoDeportivoId);
         List<Reserva> ObtenerReservasPorEvento(int eventoDeportivoId);
-        List<Reserva> ObtenerReservasPorPersona(int personaId);
+        List<Reserva> ObtenerReservasPorUsuario(int usuarioId);
     }
 }

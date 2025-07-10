@@ -19,7 +19,7 @@ public class AltaEventoDeportivo
         repoPersona = repoP;
         _validador = new ValidadorEventoDeportivo(repoP);
     }
-    public void Ejecutar(EventoDeportivo evento, int PersonaId)
+    public void Ejecutar(EventoDeportivo evento)
     {
         _validador.ValidarAlta(evento); //Falta una variable IRepositorioPersona 
         _repositorio.Agregar(evento);

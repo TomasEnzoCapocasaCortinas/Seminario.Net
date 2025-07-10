@@ -49,7 +49,7 @@ namespace CentroEventos.Repositorios
         public bool ExisteReservaParaPersonaYEvento(int personaId, int eventoDeportivoId)
         {
             return dataBase.Reservas.Any(r =>
-                r.PersonaId == personaId && r.EventoDeportivoId == eventoDeportivoId);
+                r.UsuarioId == personaId && r.EventoDeportivoId == eventoDeportivoId);
         }
 
         public int ContarReservasPorEvento(int eventoDeportivoId)
@@ -67,14 +67,14 @@ namespace CentroEventos.Repositorios
                 .Where(r => r.EventoDeportivoId == eventoDeportivoId)
                 .ToList();
         }
-    public List<Reserva> ObtenerReservasPorPersona(int personaId)
+    public List<Reserva> ObtenerReservasPorUsuario(int usuarioId)
     {
-        var persona = dataBase.Personas.FirstOrDefault(e => e.Id == personaId);
-        if (persona == null)
+        var usuario = dataBase.Usuarios.FirstOrDefault(e => e.Id == usuarioId);
+        if (usuario == null)
             return new List<Reserva>();
 
         return dataBase.Reservas
-            .Where(r => r.PersonaId == personaId)
+            .Where(r => r.UsuarioId == usuarioId)
             .ToList();
     }
     }

@@ -12,7 +12,7 @@
 
 <h1>Mis Reservas</h1>
 
-@if (misReservas == null)
+@if (misReservas == null || !misReservas.Any())
 {
     <p><em>No Tenés ninguna reserva.</em></p>
 }
@@ -57,6 +57,10 @@ else
         </tbody>
     </table>
 }
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        <div class="alert alert-danger mt-3">@mensaje</div>
+    }
 @code
 {
     private Usuario? usuarioActual;
@@ -78,9 +82,8 @@ else
         }
         
     }
-
     private void CargarReservas(){
-        misReservas = RepositorioReservas.ObtenerReservasPorPersona(usuarioActual!.Id);
+        misReservas = RepositorioReservas.ObtenerReservasPorUsuario(usuarioActual!.Id);
 
             var eventosIds = misReservas.Select(r => r.EventoDeportivoId).Distinct();
             foreach (var id in eventosIds)

@@ -3,7 +3,7 @@
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.CasosDeUso
 @using CentroEventos.Aplicacion.Enumerativos
-@inject AltaEventoDeportivo AltaEvento
+@inject IRepositorioEventoDeportivo RepositorioEvento
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
 
@@ -49,7 +49,7 @@ else
 @code {
     private EventoDeportivo eventoN = new();
     private DateTime fecha = DateTime.Today;
-    private TimeOnly hora = new TimeOnly(12, 0);
+    private TimeOnly hora = new TimeOnly(0, 0);
     private string? mensaje;
     private bool tienePermisos = false;
     private Usuario? usuarioActual;
@@ -70,7 +70,7 @@ else
         try
         {
             eventoN.FechaHoraInicio = fecha + hora.ToTimeSpan();
-            AltaEvento.Ejecutar(eventoN, eventoN.ResponsableID);
+            RepositorioEvento.Agregar(eventoN);
             Nav.NavigateTo("/miseventos");
         }
         catch (Exception ex)

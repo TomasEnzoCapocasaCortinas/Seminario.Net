@@ -78,7 +78,7 @@ else
         tienePermisos = usuarioActual!.Permisos.Contains(Permiso.ReservaAlta);
         if (!tienePermisos)
         {
-            mensaje = "No tienes permisos para crear un evento.";
+            mensaje = "No tienes permisos para crear una reserva.";
         }
         if (usuarioActual != null)
         {
@@ -129,7 +129,7 @@ else
 
         var nuevaReserva = new Reserva
         {
-            PersonaId = usuarioActual.Id,
+            UsuarioId = usuarioActual.Id,
             EventoDeportivoId = eventoSeleccionado.ID,
             FechaAltaReserva = DateTime.Now,
             EstadoAsistencia = EstadoAsistencia.Pendiente

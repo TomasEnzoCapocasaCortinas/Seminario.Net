@@ -77,7 +77,7 @@ public class CentroEventosDbContext : DbContext
         {
             entidad.ToTable("Reservas");
             entidad.HasKey(r => r.Id);
-            entidad.Property(r => r.PersonaId).IsRequired();
+            entidad.Property(r => r.UsuarioId).IsRequired();
             entidad.Property(r => r.EventoDeportivoId).IsRequired();
             entidad.Property(r => r.FechaAltaReserva).IsRequired();
             entidad.Property(r => r.EstadoAsistencia)

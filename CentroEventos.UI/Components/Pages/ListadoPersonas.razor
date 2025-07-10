@@ -4,7 +4,7 @@
 @using CentroEventos.Aplicacion.Enumerativos
 @rendermode InteractiveServer
 @inject ServicioSesionUsuario Sesion
-
+@inject IRepositorioEventoDeportivo RepositorioEventos
 @inject IRepositorioPersona ServicioPersonas
 @inject NavigationManager Nav
 
@@ -52,7 +52,7 @@ else
                     <td>
                         @if (Sesion.ObtenerUsuarioActual().Permisos.Contains(Permiso.PersonaModificacion))
                         {
-                        <button class="btn btn-sm btn-danger ms-1" @onclick="@(() => Editar(persona.Id))">
+                        <button class="btn btn-sm btn-primary ms-1" @onclick="@(() => Editar(persona.Id))">
                         Editar    <span class="oi oi-trash"></span>
                         </button>
                         }
@@ -128,7 +128,16 @@ else
                 mensaje = "No tenés permiso para eliminar personas.";
                 return;
             }
+            var eventos = RepositorioEventos.ObtenerTodos();
+            var esResponsable = eventos.Any(e => e.ResponsableID == id);
+
+            if (esResponsable)
+            {
+                mensaje = "No se puede eliminar la persona porque es responsable de al menos un evento.";
+                return;
+            }
             ServicioPersonas.Eliminar(id);
+            mensaje = "Persona eliminada correctamente.";
             CargarPersonas();
         }
         catch (Exception ex)

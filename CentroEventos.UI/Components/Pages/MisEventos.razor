@@ -7,6 +7,7 @@
 @inject IRepositorioEventoDeportivo RepositorioEventos
 @inject EliminarEventoDeportivo eliminarEventoDeportivo
 @inject ObtenerTodosEventosDeportivos obtenerEventosDeportivos
+@inject IRepositorioReserva RepositorioReservas
 @inject NavigationManager NavigationManager
 
 <h1>Mis Eventos</h1>
@@ -25,27 +26,30 @@ else
                <th>Descripción</th>
                <th>Fecha y hora</th>
                <th>Duración</th>
-               <th>Cupo máximo</th>
+               <th>Cupo</th>
                <th>Acciones</th>
            </tr>
        </thead>
        <tbody>
            @foreach (var evento in miseventos)
            {
+                var reservas = RepositorioReservas.ObtenerReservasPorEvento(evento.ID).Count;
                <tr>
                    <td>@evento.ID</td>
                    <td>@evento.Nombre</td>
                    <td>@evento.Descripcion</td>
                    <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
                    <td>@evento.DuracionHoras hs</td>
-                   <td>@evento.CupoMaximo</td>
+                   <td>@(evento.CupoMaximo - reservas)</td>
+
                    <td> 
+                    <button class="btn btn-primary" @onclick=Editar>Editar</button>
                     <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(evento)">Eliminar</button>
                    </td>
                </tr>
            }
        </tbody>
-            <button class="btn btn-primary" @onclick=Editar>Editar</button>
+            
     </table>
 }
 @if (!string.IsNullOrEmpty(mensaje))
