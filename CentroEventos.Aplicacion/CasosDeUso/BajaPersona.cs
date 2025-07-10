@@ -17,7 +17,7 @@ public class CasoDeUsoBajaPersona
 
     public void Ejecutar(int id, int usuario)
     {
-        if (Autorizacion.PoseeElPermiso(usuario, Permiso.UsuarioBaja)) {
+        if (Autorizacion.PoseeElPermiso(usuario, Permiso.PersonaBaja)) {
             if (!RepositorioP.Eliminar(id))
                 throw new EntidadNotFoundException("No se encontró la persona con el ID especificado.");
         }

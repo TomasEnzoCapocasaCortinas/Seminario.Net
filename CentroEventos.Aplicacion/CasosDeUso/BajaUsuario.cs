@@ -14,7 +14,7 @@ public class BajaUsuario
     }
     public void Ejecutar(int IdEliminar, int IdUsuario)
     {
-        if (!Autorizacion.PoseeElPermiso(IdUsuario, Permiso.UsuarioBaja))
+        if (!Autorizacion.PoseeElPermiso(IdUsuario, Permiso.PersonaBaja))
         {
             throw new FalloAutorizacionException("No posee el permiso para realizar esta accion.");
         }

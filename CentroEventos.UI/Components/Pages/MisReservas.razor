@@ -1,5 +1,6 @@
 @page "/misreservas"
 @rendermode InteractiveServer
+@using System
 @using CentroEventos.Aplicacion.Interfaces
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.Enumerativos
@@ -20,10 +21,12 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Evento</th>
-                <th>Fecha</th>
+                <th>Fecha y hora</th>
                 <th>Duracion</th>
                 <th>Estado</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +34,7 @@ else
             {
                 var evento = eventosPorId[reserva.EventoDeportivoId];
                 <tr>
+                    <td>@evento.ID</td>
                     <td>@evento.Nombre</td>
                     <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evento.DuracionHoras hs</td>
@@ -40,7 +44,6 @@ else
                             <td> 
                                 <button class="btn btn-danger btn-sm" @onclick="() => CancelarReserva(reserva.Id)">Cancelar</button>
                             </td>
-                            <label>@reserva.Id</label>
                         } 
                         else if (reserva.EstadoAsistencia == EstadoAsistencia.Pendiente)
                         {
@@ -60,6 +63,10 @@ else
     private List<Reserva>? misReservas;
     private Dictionary<int, EventoDeportivo> eventosPorId = new();
     private string? mensaje;
+    private bool TienePermiso(Permiso permiso)
+    {
+        return Sesion.EstaAutenticado() && Sesion.ObtenerUsuarioActual().Permisos.Contains(permiso);
+    }
 
     protected override void OnInitialized()
     {
@@ -85,6 +92,11 @@ else
     }
      private void CancelarReserva(int reservaId)
     {
+        if (!TienePermiso(Permiso.ReservaBaja))
+        {
+            mensaje = "No tenés permiso para eliminar la reserva.";
+            return;
+        }
         RepositorioReservas.Eliminar(reservaId);
         mensaje = "Reserva cancelada correctamente.";
         CargarReservas();

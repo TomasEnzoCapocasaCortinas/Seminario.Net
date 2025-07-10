@@ -14,7 +14,7 @@
 <h1>Crear Reserva</h1>
 
 @if (tienePermisos){
-    <div class="mb-3">
+    <div class="mb-3" style="max-width: 400px;">
         <label for="eventoId">Buscar evento por ID:</label>
         <input placeholder="Id del evento" @bind="eventoIdBuscado" class="form-control">
         <button class="btn btn-primary mt-1" @onclick="BuscarEventoPorId">Buscar</button>
@@ -23,7 +23,7 @@
     @if (eventoSeleccionado != null)
     {
         <h5>Evento Seleccionado:</h5>
-        <div class="card p-2 mb-3">
+        <div class="card p-2 mb-3"style="max-width: 400px;">
             <p><strong>@eventoSeleccionado.Nombre</strong></p>
             <p>@eventoSeleccionado.Descripcion</p>
             <p>@eventoSeleccionado.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</p>

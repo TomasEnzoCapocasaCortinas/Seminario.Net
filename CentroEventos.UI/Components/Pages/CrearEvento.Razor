@@ -36,15 +36,14 @@
             <button class="btn btn-secondary ms-2" @onclick="Cancelar">Cancelar</button>
         </div>
     </div>
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        <p class="alert alert-danger mt-3">@mensaje</p>
+    }
 }
 else
 {
     <div class="alert alert-danger mt-3">@mensaje</div>
-}
-
-@if (!string.IsNullOrEmpty(mensaje))
-{
-    <p class="alert alert-danger mt-3">@mensaje</p>
 }
 
 @code {

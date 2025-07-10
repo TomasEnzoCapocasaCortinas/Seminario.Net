@@ -1,16 +1,19 @@
 @page "/listado-personas"
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.Interfaces
+@using CentroEventos.Aplicacion.Enumerativos
 @rendermode InteractiveServer
+@inject ServicioSesionUsuario Sesion
+
 @inject IRepositorioPersona ServicioPersonas
 @inject NavigationManager Nav
 
-<h3>Listado de Personas</h3>
-
-<button class="btn btn-success mb-3" @onclick="NuevaPersona">
-    <span class="oi oi-plus"></span> Nueva Persona
-</button>
-
+<h1>Listado de Personas</h1>
+<div class="d-flex justify-content-center mt-2">
+    <button class="btn btn-success mb-3" @onclick="NuevaPersona">
+        <span class="oi oi-plus"></span> Nueva Persona
+    </button>
+</div>
 @if (personas == null)
 {
     <p>Cargando...</p>
@@ -24,6 +27,7 @@ else
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>DNI</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
@@ -36,12 +40,16 @@ else
             @foreach (var persona in personas)
             {
                 <tr>
+                    <td>@persona.Id</td>
                     <td>@persona.Dni</td>
                     <td>@persona.Nombre</td>
                     <td>@persona.Apellido</td>
                     <td>@persona.Email</td>
                     <td>@persona.Tel</td>
                     <td>
+                        <button class="btn btn-sm btn-danger ms-1" @onclick="@(() => Editar(persona.Id))">
+                        Editar    <span class="oi oi-trash"></span>
+                        </button>
                         <button class="btn btn-sm btn-danger ms-1" @onclick="@(() => Eliminar(persona.Id))">
                         Eliminar    <span class="oi oi-trash"></span>
                         </button>
@@ -52,14 +60,18 @@ else
     </table>
 }
 
-@if (!string.IsNullOrEmpty(error))
+@if (!string.IsNullOrEmpty(mensaje))
 {
-    <div class="alert alert-danger">@error</div>
+    <div class="alert alert-danger">@mensaje</div>
 }
 
 @code {
     private List<Persona>? personas;
-    private string? error;
+    private string? mensaje;
+    private bool TienePermiso(Permiso permiso)
+    {
+        return Sesion.EstaAutenticado() && Sesion.ObtenerUsuarioActual().Permisos.Contains(permiso);
+    }
 
     protected override void OnInitialized()
     {
@@ -74,17 +86,27 @@ else
         }
         catch (Exception ex)
         {
-            error = ex.Message;
+            mensaje = ex.Message;
         }
     }
 
     private void NuevaPersona()
     {
+        if (!TienePermiso(Permiso.PersonaAlta))
+        {
+            mensaje = "No tenés permiso para crear personas.";
+            return;
+        }
         Nav.NavigateTo("/crear-persona");
     }
 
     private void Editar(int id)
     {
+        if (!TienePermiso(Permiso.PersonaModificacion))
+        {
+            mensaje = "No tenés permiso para modificar personas.";
+            return;
+        }
         Nav.NavigateTo("/editar-persona");
     }
 
@@ -92,12 +114,17 @@ else
     {
         try
         {
+            if (!TienePermiso(Permiso.PersonaBaja))
+            {
+                mensaje = "No tenés permiso para eliminar personas.";
+                return;
+            }
             ServicioPersonas.Eliminar(id);
-            CargarPersonas(); // Recargar la lista
+            CargarPersonas();
         }
         catch (Exception ex)
         {
-            error = ex.Message;
+            mensaje = ex.Message;
         }
     }
 }

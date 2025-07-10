@@ -9,10 +9,10 @@
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
 
-<h1>Modificar Persona</h1>
+<h1>Modificar Evento</h1>
 @if (tienePermisos){
 <!-- Paso 1: Buscar por ID -->
-    <div class="mb-4">
+    <div class="mb-4" style="max-width: 400px;">
         <input placeholder="Ingrese ID" 
            @bind="idABuscar" 
            class="form-control" 

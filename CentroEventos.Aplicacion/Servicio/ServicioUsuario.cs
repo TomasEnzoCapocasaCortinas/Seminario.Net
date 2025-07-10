@@ -7,6 +7,7 @@ using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Servicio;
 using CentroEventos.Aplicacion.Excepciones;
+using CentroEventos.Aplicacion.Enumerativos;
 
 public class ServicioUsuario
 {
@@ -35,13 +36,16 @@ public class ServicioUsuario
                 return ResultadoOperacion.Fallido("Ya existe un usuario con este email");
             // Hash de la contraseña se hace en el repositorio
             usuario.FechaCreacion = DateTime.Now;
-
+            if (!_repositorioUsuario.HayUsuarios())
+            {
+                usuario.Permisos = Enum.GetValues<Permiso>().ToList();
+            }
             // Guardar usuario
             _repositorioUsuario.Agregar(usuario);
 
             // Iniciar sesión automáticamente
             _sesionUsuario.IniciarSesion(usuario);
-
+            
             return ResultadoOperacion.Exitoso("Usuario registrado con éxito");
         }
         catch (Exception ex)

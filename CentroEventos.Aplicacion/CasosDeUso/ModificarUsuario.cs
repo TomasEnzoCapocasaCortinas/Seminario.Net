@@ -21,7 +21,7 @@ public class ModificarUsuario
 
     public void Ejecutar(Usuario usuarioActualizado, int idUsuario)
     {
-        if (!Autorizacion.PoseeElPermiso(idUsuario, Permiso.UsuarioModificacion))
+        if (!Autorizacion.PoseeElPermiso(idUsuario, Permiso.PersonaModificacion))
             throw new FalloAutorizacionException("No tiene permiso para modificar usuarios");
 
         var usuario = RepositorioU.ObtenerPorId(usuarioActualizado.Id)

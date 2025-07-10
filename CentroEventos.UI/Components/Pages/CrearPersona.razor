@@ -10,13 +10,13 @@
 
 <h1>Registro de nueva persona</h1>
 @if(tienePermisos){
-    <div class="mt-3 d-flex flex-grow-1">
+    <div class="mt-3 d-flex flex-column flex-grow-1">
         <input placeholder="DNI" @bind="persona.Dni" class="form-control mb-2" style="max-width: 400px;">
         <input placeholder="Nombre" @bind="persona.Nombre" class="form-control mb-2" style="max-width: 400px;">
         <input placeholder="Apellido" @bind="persona.Apellido" class="form-control mb-2" style="max-width: 400px;">
         <input placeholder="Email" @bind="persona.Email" class="form-control mb-2" style="max-width: 400px;">
         <input placeholder="Teléfono" @bind="persona.Tel" class="form-control mb-2" style="max-width: 400px;">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center" style="max-width: 400px;">
             <button class="btn btn-primary" @onclick="Guardar">Guardar</button>
             <button class="btn btn-secondary ms-2" @onclick="Cancelar">Cancelar</button>
         </div>
