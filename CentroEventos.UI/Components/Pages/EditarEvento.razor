@@ -61,7 +61,7 @@
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
-        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.EventoAlta);
+        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.EventoModificacion);
         if (!tienePermisos)
         {
             mensaje = "No tienes permisos para modificar una persona.";

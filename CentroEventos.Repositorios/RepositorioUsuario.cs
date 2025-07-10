@@ -44,7 +44,6 @@ private readonly CentroEventosDbContext dataBase;
     }
     public void Modificar(Usuario usuario)
     {
-        usuario.Contrasenia = ObtenerHashSHA256(usuario.Contrasenia); // Asegurarse de que la contraseña esté hasheada
         dataBase.Usuarios.Update(usuario);
         dataBase.SaveChanges();
     }

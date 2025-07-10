@@ -10,9 +10,12 @@
 
 <h1>Listado de Personas</h1>
 <div class="d-flex justify-content-center mt-2">
+    @if (Sesion.ObtenerUsuarioActual().Permisos.Contains(Permiso.PersonaAlta))
+    {
     <button class="btn btn-success mb-3" @onclick="NuevaPersona">
         <span class="oi oi-plus"></span> Nueva Persona
     </button>
+    }
 </div>
 @if (personas == null)
 {
@@ -47,12 +50,18 @@ else
                     <td>@persona.Email</td>
                     <td>@persona.Tel</td>
                     <td>
+                        @if (Sesion.ObtenerUsuarioActual().Permisos.Contains(Permiso.PersonaModificacion))
+                        {
                         <button class="btn btn-sm btn-danger ms-1" @onclick="@(() => Editar(persona.Id))">
                         Editar    <span class="oi oi-trash"></span>
                         </button>
+                        }
+                        @if (Sesion.ObtenerUsuarioActual().Permisos.Contains(Permiso.PersonaBaja))
+                        {
                         <button class="btn btn-sm btn-danger ms-1" @onclick="@(() => Eliminar(persona.Id))">
                         Eliminar    <span class="oi oi-trash"></span>
                         </button>
+                        }
                     </td>
                 </tr>
             }

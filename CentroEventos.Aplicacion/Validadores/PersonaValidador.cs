@@ -16,14 +16,18 @@ public class PersonaValidador
     }
     public void Validar(Persona persona)
     {
-    if (persona == null)
-        throw new ValidacionException("La persona no puede ser nula.");
-    if (string.IsNullOrWhiteSpace(persona.Nombre))
-        throw new ValidacionException("El nombre es obligatorio.");
-    if (string.IsNullOrWhiteSpace(persona.Apellido))
-        throw new ValidacionException("El apellido es obligatorio.");
-    if (string.IsNullOrWhiteSpace(persona.Email))
-        throw new ValidacionException("El email es obligatorio.");
+        if (persona == null)
+            throw new ValidacionException("La persona no puede ser nula.");
+        if (string.IsNullOrWhiteSpace(persona.Nombre))
+            throw new ValidacionException("El nombre es obligatorio.");
+        if (string.IsNullOrWhiteSpace(persona.Apellido))
+            throw new ValidacionException("El apellido es obligatorio.");
+        if (string.IsNullOrWhiteSpace(persona.Email))
+            throw new ValidacionException("El email es obligatorio.");
+        if (string.IsNullOrWhiteSpace(persona.Dni))
+            throw new ValidacionException("El Dni es obligatorio");
+        if (string.IsNullOrWhiteSpace(persona.Tel))
+            throw new ValidacionException("El telefono es obligatorio");
     }
     public bool IdUnico(Persona p) {
         var pAux = RepositorioP.ObtenerPorId(p.Id);

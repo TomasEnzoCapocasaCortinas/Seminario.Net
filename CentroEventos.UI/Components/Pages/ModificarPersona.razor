@@ -56,7 +56,7 @@
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
-        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.EventoAlta);
+        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.PersonaModificacion);
         if (!tienePermisos)
         {
             mensaje = "No tienes permisos para modificar una persona.";
@@ -95,6 +95,6 @@
 
     private void Cancelar()
     {
-        Nav.NavigateTo("/listar-personas");
+        Nav.NavigateTo("/listado-personas");
     }
 }

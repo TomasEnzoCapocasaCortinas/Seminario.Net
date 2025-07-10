@@ -3,23 +3,29 @@ using System.Data;
 using CentroEventos.Aplicacion.Interfaces; 
 using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Excepciones;
+using CentroEventos.Aplicacion.Validadores;
 
 namespace CentroEventos.Aplicacion;
 
-public class CasoDeUsoAltaPersona
+public class AltaPersona
 {
     private readonly IRepositorioPersona RepositorioP;
 
-    public CasoDeUsoAltaPersona(IRepositorioPersona repositorio)
+    private readonly PersonaValidador _validador;
+
+    public AltaPersona(IRepositorioPersona repositorio, PersonaValidador validador)
     {
         RepositorioP = repositorio;
+        _validador = validador;
     }
     public void Ejecutar (Persona nuevaPersona)
     {
-        if (RepositorioP.ObtenerPorDNI(nuevaPersona.Dni) != null)
+        _validador.Validar(nuevaPersona);
+        
+        if (!_validador.DNIUnico(nuevaPersona))
             throw new DuplicadoException("Ya existe una persona con ese DNI.");
 
-        if (RepositorioP.ObtenerPorEmail(nuevaPersona.Email) != null)
+        if (!_validador.EmailUnico(nuevaPersona))
             throw new DuplicadoException("Ya existe una persona con ese Email.");
 
         RepositorioP.Agregar(nuevaPersona);

@@ -75,7 +75,7 @@ else
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
-        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.EventoAlta);
+        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.ReservaAlta);
         if (!tienePermisos)
         {
             mensaje = "No tienes permisos para crear un evento.";

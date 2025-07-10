@@ -4,6 +4,7 @@
 @using CentroEventos.Aplicacion.CasosDeUso
 @using CentroEventos.Aplicacion.Enumerativos
 @rendermode InteractiveServer
+@inject CentroEventos.Aplicacion.AltaPersona alta
 @inject NavigationManager Nav
 @inject ServicioSesionUsuario Sesion
 @inject IRepositorioPersona ServicioPersonas
@@ -36,7 +37,7 @@
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
-        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.EventoAlta);
+        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.PersonaAlta);
         if (!tienePermisos)
         {
             mensaje = "No tienes permisos para modificar una persona.";
@@ -47,8 +48,7 @@
         mensaje = null;
         try
         {
-            
-            ServicioPersonas.Agregar(persona);
+            alta.Ejecutar(persona);
             Nav.NavigateTo("/listado-personas");
         }
         catch (Exception ex)

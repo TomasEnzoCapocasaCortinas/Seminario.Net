@@ -23,7 +23,7 @@ builder.Services.AddScoped<ServicioSesionUsuario>();
 //Trabsient: se crea una nueva instancia cada vez que se inyecta
 builder.Services.AddTransient<AltaEventoDeportivo>();
 builder.Services.AddTransient<AltaUsuario>();
-builder.Services.AddTransient<CasoDeUsoAltaPersona>();
+builder.Services.AddTransient<AltaPersona>();
 builder.Services.AddTransient<ReservaAlta>();
 builder.Services.AddTransient<EliminarEventoDeportivo>();
 builder.Services.AddTransient<BajaUsuario>();

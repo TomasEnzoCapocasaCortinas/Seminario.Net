@@ -22,15 +22,9 @@ public class PersonaRepositorio : IRepositorioPersona
         return dataBase.Personas.Find(id);
     }
 
-    public Persona? ObtenerPorDNI(string dni)
-    {
-        return dataBase.Personas.Find(dni);
-    }
+    public Persona? ObtenerPorDNI(string dni) => dataBase.Personas.FirstOrDefault(p => p.Dni == dni);
 
-    public Persona? ObtenerPorEmail(string email)
-    {
-        return dataBase.Personas.Find(email);
-    }
+    public Persona? ObtenerPorEmail(string email) => dataBase.Personas.FirstOrDefault(p => p.Email == email);
 
     public List<Persona> ObtenerTodas()
     {
