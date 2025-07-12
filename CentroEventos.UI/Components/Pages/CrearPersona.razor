@@ -1,13 +1,12 @@
 @page "/crear-persona"
 @using CentroEventos.Aplicacion.Entidades
-@using CentroEventos.Aplicacion.Interfaces
 @using CentroEventos.Aplicacion.CasosDeUso
 @using CentroEventos.Aplicacion.Enumerativos
 @rendermode InteractiveServer
-@inject CentroEventos.Aplicacion.AltaPersona alta
+@inject AltaPersona altaPersona
 @inject NavigationManager Nav
 @inject ServicioSesionUsuario Sesion
-@inject IRepositorioPersona ServicioPersonas
+
 
 <h1>Registro de nueva persona</h1>
 @if(tienePermisos){
@@ -48,7 +47,7 @@
         mensaje = null;
         try
         {
-            alta.Ejecutar(persona);
+            altaPersona.Ejecutar(persona);
             Nav.NavigateTo("/listado-personas");
         }
         catch (Exception ex)
@@ -61,4 +60,5 @@
     {
         Nav.NavigateTo("/main");
     }
-}
+}using CentroEventos.Aplicacion;
+#line default

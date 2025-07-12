@@ -1,15 +1,15 @@
 using System;
-using CentroEventos.Aplicacion.Interfaces; //agregue esto
-using CentroEventos.Aplicacion.Entidades; //agregue esto
-using CentroEventos.Aplicacion.Excepciones; //agregue esto
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Excepciones;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class CasoDeUsoModificacionPersona
+public class ModificarPersona
 {
     private readonly IRepositorioPersona RepositorioP;
     private readonly PersonaValidador Validador;
 
-    public CasoDeUsoModificacionPersona(IRepositorioPersona repositorio, PersonaValidador validador)
+    public ModificarPersona(IRepositorioPersona repositorio, PersonaValidador validador)
     {
         RepositorioP = repositorio;
         Validador = validador;

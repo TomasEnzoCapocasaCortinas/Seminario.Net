@@ -1,6 +1,6 @@
 using System;
-using CentroEventos.Aplicacion.Interfaces;  //agregue esto
-using CentroEventos.Aplicacion.Entidades;   //agregue esto
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Entidades;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
 public class ObtenerTodosEventosDeportivos
@@ -12,7 +12,7 @@ public class ObtenerTodosEventosDeportivos
             _repositorio = repositorio;
         }
 
-        public IEnumerable<EventoDeportivo> Ejecutar()
+        public List<EventoDeportivo> Ejecutar()
         {
             return _repositorio.ObtenerTodos();
         }

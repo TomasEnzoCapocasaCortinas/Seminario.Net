@@ -4,9 +4,10 @@
 @using CentroEventos.Aplicacion.Interfaces
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.Enumerativos
-@inject IRepositorioReserva RepositorioReservas
+@inject ReservaBaja bajaReserva
+@inject ReservaListado listaReservas
+@inject ObtenerEventoDeportivoPorId eventoPorId
 @inject ServicioSesionUsuario Sesion
-@inject IRepositorioEventoDeportivo RepositorioEventos
 
 <PageTitle>Mis Reservas</PageTitle>
 
@@ -32,7 +33,7 @@ else
         <tbody>
             @foreach (var reserva in misReservas)
             {
-                var evento = eventosPorId[reserva.EventoDeportivoId];
+                var evento = eventoPorId.Ejecutar(reserva.EventoDeportivoId);
                 <tr>
                     <td>@evento.ID</td>
                     <td>@evento.Nombre</td>
@@ -83,12 +84,12 @@ else
         
     }
     private void CargarReservas(){
-        misReservas = RepositorioReservas.ObtenerReservasPorUsuario(usuarioActual!.Id);
+        misReservas = listaReservas.Ejecutar();
 
             var eventosIds = misReservas.Select(r => r.EventoDeportivoId).Distinct();
             foreach (var id in eventosIds)
             {
-                var evento = RepositorioEventos.ObtenerPorId(id);
+                var evento = eventoPorId.Ejecutar(id);
                 if (evento != null)
                     eventosPorId[id] = evento;
             }
@@ -100,7 +101,7 @@ else
             mensaje = "No tenés permiso para eliminar la reserva.";
             return;
         }
-        RepositorioReservas.Eliminar(reservaId);
+        bajaReserva.Ejecutar(reservaId, usuarioActual!.Id);
         mensaje = "Reserva cancelada correctamente.";
         CargarReservas();
         StateHasChanged();

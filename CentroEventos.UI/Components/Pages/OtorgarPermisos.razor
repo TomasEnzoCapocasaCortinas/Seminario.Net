@@ -5,7 +5,9 @@
 @using CentroEventos.Aplicacion.Enumerativos
 @using CentroEventos.Aplicacion.CasosDeUso
 @inject ServicioSesionUsuario Sesion
-@inject IRepositorioUsuario RepositorioUsuarios
+@inject ModificarUsuario editarUsuario
+@inject ListarUsuarios listarUsuarios
+@inject IRepositorioUsuario RepositorioUsuarios //esto hay que cambiar
 @inject NavigationManager Nav
 
 <PageTitle>Otorgar Permisos</PageTitle>
@@ -63,7 +65,7 @@
 
         if (TienePermiso(Permiso.UsuarioModificacion))
         {
-            usuarios = RepositorioUsuarios.ObtenerTodos();
+            usuarios = listarUsuarios.Ejecutar();
         }
         else{
             mensaje = "No tienes permisos para modificar usuarios.";
@@ -93,7 +95,7 @@
             .Select(p => p.Key)
             .ToList();
 
-        RepositorioUsuarios.Modificar(usuarioSeleccionado);
+        editarUsuario.Ejecutar(usuarioSeleccionado, usuarioActual!.Id);
 
         mensaje = "Permisos actualizados correctamente.";
     }

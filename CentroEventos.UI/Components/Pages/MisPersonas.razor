@@ -1,11 +1,12 @@
-@page "/listado-personas"
+@page "/mispersonas"
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.Interfaces
 @using CentroEventos.Aplicacion.Enumerativos
 @rendermode InteractiveServer
 @inject ServicioSesionUsuario Sesion
-@inject IRepositorioEventoDeportivo RepositorioEventos
-@inject IRepositorioPersona ServicioPersonas
+@inject CasoDeUsoBajaPersona bajaPersona
+@inject ObtenerTodosEventosDeportivos listarEventos
+@inject ListadoPersona listarPersonas
 @inject NavigationManager Nav
 
 <h1>Listado de Personas</h1>
@@ -75,6 +76,7 @@ else
 }
 
 @code {
+    private Usuario? usuarioActual;
     private List<Persona>? personas;
     private string? mensaje;
     private bool TienePermiso(Permiso permiso)
@@ -84,6 +86,7 @@ else
 
     protected override void OnInitialized()
     {
+        usuarioActual = Sesion.ObtenerUsuarioActual();
         CargarPersonas();
     }
 
@@ -91,7 +94,7 @@ else
     {
         try
         {
-            personas = ServicioPersonas.ObtenerTodas().ToList();
+            personas = listarPersonas.Ejecutar();
         }
         catch (Exception ex)
         {
@@ -128,7 +131,7 @@ else
                 mensaje = "No tenés permiso para eliminar personas.";
                 return;
             }
-            var eventos = RepositorioEventos.ObtenerTodos();
+            var eventos = listarEventos.Ejecutar();
             var esResponsable = eventos.Any(e => e.ResponsableID == id);
 
             if (esResponsable)
@@ -136,7 +139,7 @@ else
                 mensaje = "No se puede eliminar la persona porque es responsable de al menos un evento.";
                 return;
             }
-            ServicioPersonas.Eliminar(id);
+            bajaPersona.Ejecutar(id, usuarioActual!.Id);
             mensaje = "Persona eliminada correctamente.";
             CargarPersonas();
         }

@@ -4,10 +4,9 @@
 @using CentroEventos.Aplicacion.CasosDeUso
 @using CentroEventos.Aplicacion.Enumerativos
 @inject ServicioSesionUsuario Sesion
-@inject IRepositorioEventoDeportivo RepositorioEventos
 @inject EliminarEventoDeportivo eliminarEventoDeportivo
 @inject ObtenerTodosEventosDeportivos obtenerEventosDeportivos
-@inject IRepositorioReserva RepositorioReservas
+@inject ReservaListado reservaListado
 @inject NavigationManager NavigationManager
 
 <h1>Mis Eventos</h1>
@@ -33,7 +32,7 @@ else
        <tbody>
            @foreach (var evento in miseventos)
            {
-                var reservas = RepositorioReservas.ObtenerReservasPorEvento(evento.ID).Count;
+                var reservas = reservaListado.Ejecutar().Count;
                <tr>
                    <td>@evento.ID</td>
                    <td>@evento.Nombre</td>

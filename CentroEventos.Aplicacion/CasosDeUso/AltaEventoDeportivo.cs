@@ -1,8 +1,8 @@
 using System;
-using CentroEventos.Aplicacion.Interfaces; //agregue esto
+using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Validadores;
-using CentroEventos.Aplicacion.Entidades; //agregue esto
-
+using CentroEventos.Aplicacion.Entidades; 
+//repo persona???
 
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
@@ -21,7 +21,7 @@ public class AltaEventoDeportivo
     }
     public void Ejecutar(EventoDeportivo evento)
     {
-        _validador.ValidarAlta(evento); //Falta una variable IRepositorioPersona 
+        _validador.ValidarAlta(evento);
         _repositorio.Agregar(evento);
     }
 }

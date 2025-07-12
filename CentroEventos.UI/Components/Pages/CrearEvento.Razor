@@ -3,7 +3,7 @@
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.CasosDeUso
 @using CentroEventos.Aplicacion.Enumerativos
-@inject IRepositorioEventoDeportivo RepositorioEvento
+@inject AltaEventoDeportivo altaEvento
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
 
@@ -70,7 +70,7 @@ else
         try
         {
             eventoN.FechaHoraInicio = fecha + hora.ToTimeSpan();
-            RepositorioEvento.Agregar(eventoN);
+            altaEvento.Ejecutar(eventoN);
             Nav.NavigateTo("/miseventos");
         }
         catch (Exception ex)

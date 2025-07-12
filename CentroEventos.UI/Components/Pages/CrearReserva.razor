@@ -4,10 +4,12 @@
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.CasosDeUso
 @using CentroEventos.Aplicacion.Enumerativos
-@inject IRepositorioEventoDeportivo RepositorioEventos
-@inject IRepositorioReserva RepositorioReservas
+@inject ReservaAlta altaReserva
+@inject ObtenerTodosEventosDeportivos listarEventos
+@inject ObtenerEventoDeportivoPorId buscarEventoPorId
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
+@inject IRepositorioReserva RepositorioReservas //esto hay que cambiarlo 
 
 @if (Sesion.EstaAutenticado())
 {
@@ -82,14 +84,14 @@ else
         }
         if (usuarioActual != null)
         {
-            eventosDisponibles = RepositorioEventos.ObtenerTodos();
+            eventosDisponibles = listarEventos.Ejecutar();
         }
     }
 
     private void BuscarEventoPorId()
     {
         mensaje = null;
-        eventoSeleccionado = RepositorioEventos.ObtenerPorId(eventoIdBuscado);
+        eventoSeleccionado = buscarEventoPorId.Ejecutar(eventoIdBuscado);
 
         if (eventoSeleccionado == null)
         {
@@ -135,9 +137,9 @@ else
             EstadoAsistencia = EstadoAsistencia.Pendiente
         };
 
-        RepositorioReservas.Agregar(nuevaReserva);
+        altaReserva.Ejecutar(nuevaReserva, usuarioActual.Id);
         mensaje = "Reserva realizada correctamente.";
         eventoSeleccionado = null;
-        eventosDisponibles = RepositorioEventos.ObtenerTodos();
+        eventosDisponibles = listarEventos.Ejecutar();
     }
 }

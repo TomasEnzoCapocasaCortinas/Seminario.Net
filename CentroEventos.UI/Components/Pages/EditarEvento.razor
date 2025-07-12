@@ -5,13 +5,14 @@
 @using CentroEventos.Aplicacion.Enumerativos
 @using CentroEventos.Aplicacion.Interfaces
 @rendermode InteractiveServer
-@inject IRepositorioEventoDeportivo ServicioEventos
+@inject ModificarEventoDeportivo modificarEvento
+@inject ObtenerEventoDeportivoPorId buscarEventoPorId
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
 
 <h1>Modificar Evento</h1>
 @if (tienePermisos){
-<!-- Paso 1: Buscar por ID -->
+<!-- Busco Email evento por ID -->
     <div class="mb-4" style="max-width: 400px;">
         <input placeholder="Ingrese ID" 
            @bind="idABuscar" 
@@ -22,7 +23,7 @@
         </button>
     </div>
 
-<!-- Paso 2: Formulario -->
+<!-- Completo list-group datos -->
     @if (evento != null)
     {
         <div>
@@ -71,7 +72,7 @@
     {
         try 
         {
-            evento = ServicioEventos.ObtenerPorId(idABuscar);
+            evento = buscarEventoPorId.Ejecutar(idABuscar);
             mensaje = evento == null ? "No se encontró el ID" : "";
         }
         catch (Exception ex)
@@ -89,7 +90,7 @@
                 mensaje = "Debe buscar una persona primero.";
                 return;
             }
-            ServicioEventos.Modificar(evento);
+            modificarEvento.Ejecutar(evento);
             Nav.NavigateTo("/miseventos");
         }
         catch (Exception ex)

@@ -5,7 +5,9 @@
 @using CentroEventos.Aplicacion.Enumerativos
 @using CentroEventos.Aplicacion.Interfaces
 @rendermode InteractiveServer
-@inject IRepositorioPersona ServicioPersonas
+@inject ModificarPersona editarPersona
+@inject ListadoPersona listarPersona
+@inject IRepositorioPersona ServicioPersonas //esto hay que cambiar
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
 
@@ -21,7 +23,7 @@
         </button>
     </div>
 
-<!-- Paso 2: Formulario -->
+<!-- Formulario -->
     @if (persona != null)
     {
         <div>
@@ -84,7 +86,7 @@
                 mensaje = "Debe buscar una persona primero.";
                 return;
             }
-            ServicioPersonas.Actualizar(persona);
+            editarPersona.Ejecutar(persona);
             Nav.NavigateTo("/listado-personas");
         }
         catch (Exception ex)

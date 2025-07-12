@@ -6,7 +6,7 @@
 @rendermode InteractiveServer
 @inject NavigationManager Nav
 @inject ServicioUsuario ServicioUsuarios
-@inject IRepositorioUsuario Usuarios
+@inject AltaUsuario altaUsuario
 @inject ServicioSesionUsuario Sesion
 
 <h3>Registro de nuevo usuario</h3>
@@ -38,13 +38,13 @@
     void Registrar()
     {
         mensaje = null;
-        var signup = ServicioUsuarios.Registrar(usuario);
+        altaUsuario.Ejecutar(usuario);
 
-        if (!signup.Exito)
+        @* if (!signup.Exito) //cambiaaaaaarrrrrrr
         {
             mensaje = signup.Mensaje ?? "Error al registrar.";
             return;
-        }
+        } *@
 
         Nav.NavigateTo("/main");
     }
