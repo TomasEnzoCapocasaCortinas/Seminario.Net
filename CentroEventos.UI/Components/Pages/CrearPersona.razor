@@ -3,7 +3,9 @@
 @using CentroEventos.Aplicacion.CasosDeUso
 @using CentroEventos.Aplicacion.Enumerativos
 @rendermode InteractiveServer
-@inject AltaPersona altaPersona
+@inject CentroEventos.Aplicacion.CasosDeUso.AltaPersona altaPersona //me da error por alguna razón *@
+
+@inject IRepositorioPersona altaPersona
 @inject NavigationManager Nav
 @inject ServicioSesionUsuario Sesion
 
@@ -47,7 +49,7 @@
         mensaje = null;
         try
         {
-            altaPersona.Ejecutar(persona);
+            altaPersona.Agregar(persona);
             Nav.NavigateTo("/listado-personas");
         }
         catch (Exception ex)
@@ -60,5 +62,5 @@
     {
         Nav.NavigateTo("/main");
     }
-}using CentroEventos.Aplicacion;
-#line default
+}
+

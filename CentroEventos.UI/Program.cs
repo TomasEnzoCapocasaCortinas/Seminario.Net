@@ -32,11 +32,11 @@ builder.Services.AddTransient<ReservaBaja>();
 builder.Services.AddTransient<ObtenerTodosEventosDeportivos>();
 builder.Services.AddTransient<ObtenerEventoDeportivoPorId>();
 builder.Services.AddTransient<ListarUsuarios>();
-builder.Services.AddTransient<CasoDeUsoListadoPersona>();
+builder.Services.AddTransient<ListadoPersona>();
 builder.Services.AddTransient<ReservaListado>();
 builder.Services.AddTransient<ModificarEventoDeportivo>();
 builder.Services.AddTransient<ModificarUsuario>();
-builder.Services.AddTransient<CasoDeUsoModificacionPersona>();
+builder.Services.AddTransient<ModificarPersona>();
 builder.Services.AddTransient<ReservaModificacion>();
 
 //Scoped: se crea una nueva instancia por cada solicitud
