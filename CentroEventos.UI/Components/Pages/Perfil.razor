@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @using CentroEventos.Aplicacion.Entidades;
 @using CentroEventos.Aplicacion.CasosDeUso;
+@inject ModificarUsuario modificarUsuario
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Navigation
 
@@ -19,13 +20,57 @@
         <p><strong>Email:</strong> @usuario.Email</p>
         
 </div>
+@if(!quieroModificar){
+    <div class="d-flex justify-content-center" style="max-width: 400px;">
+        <button class="btn btn-primary" @onclick="Modificar">Modificar</button>
+    </div>
+    }
+@if (quieroModificar)
+    {
+        <h5>Modificar mis datos:</h5>
+        <div class="card p-2 mb-3"style="max-width: 400px;">
+            <input placeholder="Nombre" @bind="usuario.Nombre" class="form-control mb-2" style="max-width: 400px;">
+            <input placeholder="Apellido" @bind="usuario.Apellido" class="form-control mb-2" style="max-width: 400px;">
+            <input placeholder="Email" @bind="usuario.Email" class="form-control mb-2" style="max-width: 400px;">
+            <input placeholder="Teléfono" @bind="usuario.Contrasenia" class="form-control mb-2" style="max-width: 400px;">
+            <button class="btn btn-success" @onclick="Guardar">Guardar</button>
+        </div>
+    }
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    @if(exito){
+        <div class="alert alert-success mt-3">@mensaje</div>
+    }else{
+        <p class="alert alert-danger mt-3">@mensaje</p>
+    }
+    
+}
 
 @code{
     private Usuario? usuario;
+    private bool quieroModificar;
+    private bool exito;
+    private string? mensaje;
     protected override void OnInitialized()
     {
         usuario = Sesion.ObtenerUsuarioActual();
+        quieroModificar=false;
+    }
+    void Modificar(){
+        quieroModificar = true;
+    }
+    void Guardar()
+    {
+        mensaje = null;
+        try
+        {
+            modificarUsuario.Ejecutar(usuario!);
+            exito= true;
+            mensaje= "Usuario actualizado con exito.";
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+        }
     }
 }
-
-
