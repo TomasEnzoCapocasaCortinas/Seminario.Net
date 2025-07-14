@@ -7,7 +7,7 @@
 @inject ServicioSesionUsuario Sesion
 @inject ModificarUsuario editarUsuario
 @inject ListarUsuarios listarUsuarios
-@inject IRepositorioUsuario RepositorioUsuarios //esto hay que cambiar
+@inject ObtenerUsuarioPorId obtenerUsuarioPorId
 @inject NavigationManager Nav
 
 <PageTitle>Otorgar Permisos</PageTitle>
@@ -76,7 +76,7 @@
     {
         if (int.TryParse(e.Value?.ToString(), out int id))
         {
-            usuarioSeleccionado = RepositorioUsuarios.ObtenerPorId(id);
+            usuarioSeleccionado = obtenerUsuarioPorId.Ejecutar(id);
             if (usuarioSeleccionado != null)
             {
                 permisosSeleccionados = Enum.GetValues<Permiso>()

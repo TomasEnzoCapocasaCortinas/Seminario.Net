@@ -4,12 +4,12 @@ using CentroEventos.Aplicacion.Excepciones; //puse esto
 using CentroEventos.Aplicacion.Enumerativos; //puse esto
 namespace CentroEventos.Aplicacion.CasosDeUso; // cambie CentroDeportivo por CentroEventos
 
-public class CasoDeUsoBajaPersona
+public class BajaPersona
 {
     private IRepositorioPersona RepositorioP;
     private IServicioAutorizacion Autorizacion;
 
-    public CasoDeUsoBajaPersona(IRepositorioPersona repositorio, IServicioAutorizacion autorizacion)
+    public BajaPersona(IRepositorioPersona repositorio, IServicioAutorizacion autorizacion)
     {
         RepositorioP = repositorio;
         Autorizacion = autorizacion;

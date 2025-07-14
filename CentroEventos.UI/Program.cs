@@ -27,7 +27,7 @@ builder.Services.AddTransient<AltaPersona>();
 builder.Services.AddTransient<ReservaAlta>();
 builder.Services.AddTransient<EliminarEventoDeportivo>();
 builder.Services.AddTransient<BajaUsuario>();
-builder.Services.AddTransient<CasoDeUsoBajaPersona>();
+builder.Services.AddTransient<BajaPersona>();
 builder.Services.AddTransient<ReservaBaja>();
 builder.Services.AddTransient<ObtenerTodosEventosDeportivos>();
 builder.Services.AddTransient<ObtenerEventoDeportivoPorId>();

@@ -5,9 +5,9 @@
 @using CentroEventos.Aplicacion.Enumerativos
 @using CentroEventos.Aplicacion.Interfaces
 @rendermode InteractiveServer
-@inject CentroEventos.Aplicacion.CasosDeUso.ModificarPersona editarPersona
+@inject ModificarPersona editarPersona
 @inject ListadoPersona listarPersona
-@inject IRepositorioPersona ServicioPersonas //esto hay que cambiar
+@inject ObtenerPersonaPorId obtenerPersonaPorId
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
 
@@ -68,7 +68,7 @@
     {
         try 
         {
-            persona = ServicioPersonas.ObtenerPorId(idABuscar);
+            persona = obtenerPersonaPorId.Ejecutar(idABuscar);
             mensaje = persona == null ? "No se encontró el ID" : "";
         }
         catch (Exception ex)
