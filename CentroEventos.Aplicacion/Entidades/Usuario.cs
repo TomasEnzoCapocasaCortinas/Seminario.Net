@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using CentroEventos.Aplicacion.Enumerativos;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +15,7 @@ public class Usuario
     public string Email { get; set; }= string.Empty;
     //[Required(ErrorMessage = "La contraseña es obligatoria")]
     public string Contrasenia { get; set; } = string.Empty;
-    public string PermisosL { get; set; } = "";
+    public string PermisosL { get; set; } = string.Empty;
     [NotMapped]
     public List<Permiso> Permisos
     {

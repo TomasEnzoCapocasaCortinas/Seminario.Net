@@ -1,5 +1,4 @@
 using CentroEventos.UI.Components;
-//Agregamos usings casos de uso
 using CentroEventos.Repositorios;
 using CentroEventos.Aplicacion;
 using CentroEventos.Aplicacion.CasosDeUso;
@@ -7,12 +6,11 @@ using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Validadores;
 using CentroEventos.Aplicacion.Servicio;
 using Microsoft.EntityFrameworkCore;
-
-
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddDbContext<CentroEventosDbContext>(options =>
     options.UseSqlite("Data Source=centroeventos.db"));
+
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

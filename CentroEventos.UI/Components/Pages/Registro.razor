@@ -39,12 +39,12 @@
     {
         mensaje = null;
         altaUsuario.Ejecutar(usuario);
-
-        @* if (!signup.Exito) //cambiaaaaaarrrrrrr
+        var signup = ServicioUsuarios.Registrar(usuario);
+        if (!signup.Exito)
         {
             mensaje = signup.Mensaje ?? "Error al registrar.";
             return;
-        } *@
+        }
 
         Nav.NavigateTo("/main");
     }

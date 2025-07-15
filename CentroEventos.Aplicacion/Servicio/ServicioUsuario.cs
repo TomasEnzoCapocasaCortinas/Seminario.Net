@@ -50,7 +50,6 @@ public class ServicioUsuario
         }
         catch (Exception ex)
         {
-            // En un proyecto real, considera registrar este error
             return ResultadoOperacion.Fallido($"Error al registrar: {ex.Message}");
         }
     }
