@@ -53,17 +53,16 @@
             }
         </ul>
     }
-    @if (!string.IsNullOrEmpty(mensaje))
+}
+@if (!string.IsNullOrEmpty(mensaje))
     {
-        <div class="alert alert-info mt-3">@mensaje</div>
+        @if(exito){
+        <div class="alert alert-success mt-3">@mensaje</div>
+    }else{
+        <p class="alert alert-danger mt-3">@mensaje</p>
     }
 }
-else
-{
-    <div class="alert alert-danger mt-3">@mensaje</div>
-}
-}
-    
+}   
 
 
 @code {
@@ -73,7 +72,7 @@ else
     private List<EventoDeportivo>? eventosDisponibles;
     private string? mensaje;
     private bool tienePermisos=false;
-
+    private bool exito=false;
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
@@ -95,6 +94,7 @@ else
 
         if (eventoSeleccionado == null)
         {
+            exito=true;
             mensaje = "No se encontró ningún evento con ese ID.";
         }
     }
@@ -138,6 +138,7 @@ else
         };
 
         altaReserva.Ejecutar(nuevaReserva, usuarioActual.Id);
+        exito =true;
         mensaje = "Reserva realizada correctamente.";
         eventoSeleccionado = null;
         eventosDisponibles = listarEventos.Ejecutar();

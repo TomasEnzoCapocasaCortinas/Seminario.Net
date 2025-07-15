@@ -45,7 +45,11 @@
 }
 @if (!string.IsNullOrEmpty(mensaje))
 {
-    <p class="alert alert-danger mt-3">@mensaje</p>
+    @if(exito){
+        <div class="alert alert-success mt-3">@mensaje</div>
+    }else{
+        <p class="alert alert-danger mt-3">@mensaje</p>
+    }
 }
 
 @code {
@@ -54,7 +58,7 @@
     private Persona? persona;
     private string? mensaje;
     private bool tienePermisos=false;
-
+    private bool exito=false;
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();

@@ -33,6 +33,7 @@ builder.Services.AddTransient<ReservaBaja>();
 builder.Services.AddTransient<ObtenerTodosEventosDeportivos>();
 builder.Services.AddTransient<ObtenerEventoDeportivoPorId>();
 builder.Services.AddTransient<ObtenerUsuarioPorId>();
+builder.Services.AddTransient<ObtenerPersonaPorId>();
 builder.Services.AddTransient<ListarUsuarios>();
 builder.Services.AddTransient<ListadoPersona>();
 builder.Services.AddTransient<ReservaListado>();

@@ -60,7 +60,11 @@ else
 }
     @if (!string.IsNullOrEmpty(mensaje))
     {
-        <div class="alert alert-danger mt-3">@mensaje</div>
+        @if(exito){
+        <div class="alert alert-success mt-3">@mensaje</div>
+    }else{
+        <p class="alert alert-danger mt-3">@mensaje</p>
+    }
     }
 @code
 {
@@ -72,7 +76,7 @@ else
     {
         return Sesion.EstaAutenticado() && Sesion.ObtenerUsuarioActual().Permisos.Contains(permiso);
     }
-
+    private bool exito=false;
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
@@ -102,6 +106,7 @@ else
             return;
         }
         bajaReserva.Ejecutar(reservaId, usuarioActual!.Id);
+        exito=true;
         mensaje = "Reserva cancelada correctamente.";
         CargarReservas();
         StateHasChanged();
@@ -113,6 +118,7 @@ else
         {
             reserva.EstadoAsistencia = nuevoEstado;
 #line default
+        exito=true;
         mensaje = $"Asistencia marcada como {nuevoEstado}.";
             CargarReservas();
             StateHasChanged();

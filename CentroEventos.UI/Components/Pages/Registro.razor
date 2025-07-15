@@ -28,13 +28,17 @@
 
 @if (!string.IsNullOrEmpty(mensaje))
 {
-    <p style="color:red">@mensaje</p>
+    @if(exito){
+        <div class="alert alert-success mt-3">@mensaje</div>
+    }else{
+        <p class="alert alert-danger mt-3">@mensaje</p>
+    }
 }
 
 @code {
     private Usuario usuario = new();
     private string? mensaje;
-
+    private bool exito=false;
     void Registrar()
     {
         mensaje = null;

@@ -36,16 +36,16 @@
             <button class="btn btn-secondary ms-2" @onclick="Cancelar">Cancelar</button>
         </div>
     </div>
-    @if (!string.IsNullOrEmpty(mensaje))
+    
+}
+@if (!string.IsNullOrEmpty(mensaje))
     {
+        @if(exito){
+        <div class="alert alert-success mt-3">@mensaje</div>
+    }else{
         <p class="alert alert-danger mt-3">@mensaje</p>
     }
-}
-else
-{
-    <div class="alert alert-danger mt-3">@mensaje</div>
-}
-
+    }
 @code {
     private EventoDeportivo eventoN = new();
     private DateTime fecha = DateTime.Today;
@@ -53,7 +53,7 @@ else
     private string? mensaje;
     private bool tienePermisos = false;
     private Usuario? usuarioActual;
-
+    private bool exito=false;
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
@@ -71,6 +71,8 @@ else
         {
             eventoN.FechaHoraInicio = fecha + hora.ToTimeSpan();
             altaEvento.Ejecutar(eventoN);
+            exito = true;
+            mensaje = "Evento creado exitosamente.";
             Nav.NavigateTo("/miseventos");
         }
         catch (Exception ex)

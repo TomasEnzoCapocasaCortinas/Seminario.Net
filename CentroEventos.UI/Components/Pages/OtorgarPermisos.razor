@@ -44,9 +44,13 @@
     }
 }
 @if (!string.IsNullOrEmpty(mensaje))
-        {
-            <div class="alert alert-success mt-3">@mensaje</div>
+    {
+            @if(exito){
+        <div class="alert alert-success mt-3">@mensaje</div>
+        }else{
+            <p class="alert alert-danger mt-3">@mensaje</p>
         }
+    }
 
 @code {
     private Usuario? usuarioActual;
@@ -58,7 +62,7 @@
         return Sesion.EstaAutenticado() && Sesion.ObtenerUsuarioActual().Permisos.Contains(permiso);
     }
     private string? mensaje;
-
+    private bool exito=false;
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
@@ -96,7 +100,7 @@
             .ToList();
 
         editarUsuario.Ejecutar(usuarioSeleccionado);
-
+        exito=true;
         mensaje = "Permisos actualizados correctamente.";
     }
 }

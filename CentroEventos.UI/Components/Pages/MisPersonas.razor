@@ -72,7 +72,11 @@ else
 
 @if (!string.IsNullOrEmpty(mensaje))
 {
-    <div class="alert alert-danger">@mensaje</div>
+    @if(exito){
+        <div class="alert alert-success mt-3">@mensaje</div>
+    }else{
+        <p class="alert alert-danger mt-3">@mensaje</p>
+    }
 }
 
 @code {
@@ -83,7 +87,7 @@ else
     {
         return Sesion.EstaAutenticado() && Sesion.ObtenerUsuarioActual().Permisos.Contains(permiso);
     }
-
+    private bool exito=false;
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
@@ -140,6 +144,7 @@ else
                 return;
             }
             bajaPersona.Ejecutar(id, usuarioActual!.Id);
+            exito=true;
             mensaje = "Persona eliminada correctamente.";
             CargarPersonas();
         }
