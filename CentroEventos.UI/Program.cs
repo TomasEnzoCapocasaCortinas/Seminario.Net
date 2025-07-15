@@ -7,8 +7,11 @@ using CentroEventos.Aplicacion.Validadores;
 using CentroEventos.Aplicacion.Servicio;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
+var dbPath = Path.Combine("..", "CentroEventos.Repositorios", "centroeventos.db");
+var fullPath = Path.GetFullPath(dbPath);
+
 builder.Services.AddDbContext<CentroEventosDbContext>(options =>
-    options.UseSqlite("Data Source=centroeventos.db"));
+    options.UseSqlite($"Data Source={fullPath}"));
 
 
 // Add services to the container.
@@ -29,6 +32,7 @@ builder.Services.AddTransient<BajaPersona>();
 builder.Services.AddTransient<ReservaBaja>();
 builder.Services.AddTransient<ObtenerTodosEventosDeportivos>();
 builder.Services.AddTransient<ObtenerEventoDeportivoPorId>();
+builder.Services.AddTransient<ObtenerUsuarioPorId>();
 builder.Services.AddTransient<ListarUsuarios>();
 builder.Services.AddTransient<ListadoPersona>();
 builder.Services.AddTransient<ReservaListado>();

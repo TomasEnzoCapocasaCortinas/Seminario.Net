@@ -38,14 +38,13 @@
     void Registrar()
     {
         mensaje = null;
+        try{
         altaUsuario.Ejecutar(usuario);
-        var signup = ServicioUsuarios.Registrar(usuario);
-        if (!signup.Exito)
-        {
-            mensaje = signup.Mensaje ?? "Error al registrar.";
-            return;
-        }
-
+        Sesion.IniciarSesion(usuario);
         Nav.NavigateTo("/main");
+        }
+        catch(Exception ex){
+            mensaje = ex.Message;
+        }
     }
 }
