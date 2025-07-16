@@ -37,20 +37,16 @@ public class PersonaValidador
         }
         else return true;
     }
-    public bool DNIUnico(Persona p) {
-        var pAux = RepositorioP.ObtenerPorDNI(p.Dni);
-        if (pAux != null && p.Dni.Equals(pAux.Dni))
-        {
-            return false;
-        }
-        else return true;
+    public bool DNIUnico(Persona persona)
+    {
+    var existente = RepositorioP.ObtenerPorDNI(persona.Dni);
+    return existente == null || existente.Id == persona.Id;
     }
-    public bool EmailUnico(Persona p) {
-        var pAux = RepositorioP.ObtenerPorEmail(p.Email);
-        if (pAux != null && p.Email.Equals(pAux.Email))
-        {
-            return false;
-        }
-        else return true;
+
+    public bool EmailUnico(Persona persona)
+    {
+    var existente = RepositorioP.ObtenerPorEmail(persona.Email);
+    return existente == null || existente.Id == persona.Id;
     }
+
 }

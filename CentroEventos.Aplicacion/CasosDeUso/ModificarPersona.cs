@@ -17,8 +17,8 @@ public class ModificarPersona
 
     public void Ejecutar(Persona personaActualizada)
     {
-        var persona = RepositorioP.ObtenerPorId(personaActualizada.Id)
-            ?? throw new EntidadNotFoundException("No se encontró la persona");
+        if(RepositorioP.ObtenerPorId(personaActualizada.Id)==null)
+            throw new EntidadNotFoundException("No se encontró la persona");
 
         Validador.Validar(personaActualizada);
         if (!Validador.DNIUnico(personaActualizada))

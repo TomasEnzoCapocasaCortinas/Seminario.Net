@@ -35,7 +35,7 @@ else
             {
                 var evento = eventoPorId.Ejecutar(reserva.EventoDeportivoId);
                 <tr>
-                    <td>@evento.ID</td>
+                    <td>@evento!.ID</td>
                     <td>@evento.Nombre</td>
                     <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evento.DuracionHoras hs</td>

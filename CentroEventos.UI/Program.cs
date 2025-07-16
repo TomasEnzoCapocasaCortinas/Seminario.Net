@@ -36,6 +36,8 @@ builder.Services.AddTransient<ObtenerUsuarioPorId>();
 builder.Services.AddTransient<ObtenerPersonaPorId>();
 builder.Services.AddTransient<ListarUsuarios>();
 builder.Services.AddTransient<ListadoPersona>();
+builder.Services.AddTransient<ListarEventosConCupoDisponible>();
+builder.Services.AddTransient<ListarAsistenciaAEvento>();
 builder.Services.AddTransient<ReservaListado>();
 builder.Services.AddTransient<ModificarEventoDeportivo>();
 builder.Services.AddTransient<ModificarUsuario>();
