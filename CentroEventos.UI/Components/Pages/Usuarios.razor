@@ -10,20 +10,21 @@
 @inject NavigationManager Nav
 
 <h1>Listado de usuarios</h1>
-<div class="d-flex justify-content-center mt-2">
+@if(tienePermisos){
+    <div class="d-flex justify-content-center mt-2">
 
-</div>
-@if (usuarios == null)
-{
-    <p>Cargando...</p>
-}
-else if (!usuarios.Any())
-{
-    <p>No hay usuarios registrados</p>
-}
-else
-{
-    <table class="table table-striped">
+    </div>
+    @if (usuarios == null)
+    {
+     <p>Cargando...</p>
+    }
+    else if (!usuarios.Any())
+    {
+        <p>No hay usuarios registrados</p>
+    }
+    else
+    {
+     <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -60,7 +61,7 @@ else
         </tbody>
     </table>
 }
-
+}
 @if (!string.IsNullOrEmpty(mensaje))
 {
     @if(exito){
@@ -74,6 +75,7 @@ else
     private Usuario? usuarioActual;
     private List<Usuario>? usuarios;
     private string? mensaje;
+    private bool tienePermisos=false;
     private bool TienePermiso(Permiso permiso)
     {
         return Sesion.EstaAutenticado() && Sesion.ObtenerUsuarioActual().Permisos.Contains(permiso);
@@ -83,6 +85,11 @@ else
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
         CargarUsuarios();
+        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.UsuarioListado);
+        if (!tienePermisos)
+        {
+            mensaje = "No tienes permisos para modificar una persona.";
+        }
     }
 
     private void CargarUsuarios()
