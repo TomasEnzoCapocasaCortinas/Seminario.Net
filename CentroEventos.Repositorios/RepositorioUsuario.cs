@@ -42,8 +42,12 @@ private readonly CentroEventosDbContext dataBase;
             return builder.ToString();
         }
     }
-    public void Modificar(Usuario usuario)
-    {
+    public void Modificar(Usuario usuario, string? contraseniaNueva){
+        if (!string.IsNullOrWhiteSpace(contraseniaNueva))
+        {
+        usuario.Contrasenia = ObtenerHashSHA256(contraseniaNueva);
+        }
+    // Si no vino contraseña nueva, se mantiene el hash anterior
         dataBase.Usuarios.Update(usuario);
         dataBase.SaveChanges();
     }

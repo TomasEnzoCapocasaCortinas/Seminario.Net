@@ -16,6 +16,7 @@ namespace CentroEventos.Repositorios
 
         public void Agregar(Reserva reserva)
         {
+            //verificar que la cantidad de reservas no supere el máximo permitido
             dataBase.Reservas.Add(reserva);
             dataBase.SaveChanges();
         }
@@ -60,7 +61,7 @@ namespace CentroEventos.Repositorios
         public List<Reserva> ObtenerReservasPorEvento(int eventoDeportivoId)
         {
             var evento = dataBase.EventosDeportivos.FirstOrDefault(e => e.ID == eventoDeportivoId);
-            if (evento == null || evento.FechaHoraInicio > DateTime.Now)
+            if (evento == null || evento.FechaHoraInicio < DateTime.Now)
                 return new List<Reserva>();
 
             return dataBase.Reservas
