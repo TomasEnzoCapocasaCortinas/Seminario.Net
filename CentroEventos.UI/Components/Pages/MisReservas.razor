@@ -5,7 +5,7 @@
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.Enumerativos
 @inject ReservaBaja bajaReserva
-@inject ReservaListado listaReservas
+@inject ReservaListadoPorUsuario listaReservas
 @inject ObtenerEventoDeportivoPorId eventoPorId
 @inject ServicioSesionUsuario Sesion
 
@@ -88,7 +88,7 @@ else
         
     }
     private void CargarReservas(){
-        misReservas = listaReservas.Ejecutar();
+        misReservas = listaReservas.Ejecutar(usuarioActual!.Id);
 
             var eventosIds = misReservas.Select(r => r.EventoDeportivoId).Distinct();
             foreach (var id in eventosIds)
