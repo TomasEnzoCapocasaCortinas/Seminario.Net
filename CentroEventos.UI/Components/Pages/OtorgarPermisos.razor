@@ -99,7 +99,7 @@
             .Select(p => p.Key)
             .ToList();
 
-        editarUsuario.Ejecutar(usuarioSeleccionado);
+        editarUsuario.Ejecutar(usuarioSeleccionado, null);
         exito=true;
         mensaje = "Permisos actualizados correctamente.";
     }

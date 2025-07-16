@@ -17,7 +17,7 @@ public class ModificarUsuario
         Validador = validador;
     }
 
-    public void Ejecutar(Usuario usuarioActualizado)
+    public void Ejecutar(Usuario usuarioActualizado, string? contrasenia)
     {
         var usuario = RepositorioU.ObtenerPorId(usuarioActualizado.Id)
             ?? throw new EntidadNotFoundException("El usuario no existe");
@@ -26,6 +26,6 @@ public class ModificarUsuario
             throw new DuplicadoException("Ya existe otro usuario con ese email");
 
         Validador.Validar(usuarioActualizado);
-        RepositorioU.Modificar(usuarioActualizado);
+        RepositorioU.Modificar(usuarioActualizado, contrasenia);
     }
 }

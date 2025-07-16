@@ -19,7 +19,8 @@
         <InputDate @bind-Value="fecha" class="form-control mb-2" />
 
         <label>Hora de inicio</label>
-        <input type="time" @bind-value="hora" @bind-value:format="HH:mm" class="form-control mb-2" />
+        <input type="time"value=" @hora.ToString(@"hh\:mm")" class="form-control mb-2" />
+
 
         <label>Duracion en Horas</label>
         <input placeholder="Duración (horas)" @bind="eventoN.DuracionHoras" class="form-control mb-2" />
@@ -64,6 +65,8 @@
             mensaje = "No tienes permisos para crear un evento.";
         }
     }
+
+
     private void CrearEventoNuevo()
     {
         mensaje = null;

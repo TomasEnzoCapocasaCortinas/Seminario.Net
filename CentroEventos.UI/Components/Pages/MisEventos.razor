@@ -6,7 +6,7 @@
 @inject ServicioSesionUsuario Sesion
 @inject EliminarEventoDeportivo eliminarEventoDeportivo
 @inject ObtenerTodosEventosDeportivos obtenerEventosDeportivos
-@inject ReservaListado reservaListado
+@inject ReservaListadoPorEvento reservaListado
 @inject NavigationManager NavigationManager
 
 <h1>Mis Eventos</h1>
@@ -32,7 +32,7 @@ else
        <tbody>
            @foreach (var evento in miseventos)
            {
-                var reservas = reservaListado.Ejecutar().Count;
+                var reservas = reservaListado.Ejecutar(evento.ID).Count;
                <tr>
                    <td>@evento.ID</td>
                    <td>@evento.Nombre</td>
