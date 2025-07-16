@@ -19,8 +19,7 @@
         <InputDate @bind-Value="fecha" class="form-control mb-2" />
 
         <label>Hora de inicio</label>
-        <input type="time"value=" @hora.ToString(@"hh\:mm")" class="form-control mb-2" />
-
+        <input type="time" value="@hora.ToString(@"HH\:mm")" @onchange="OnHoraChange" class="form-control mb-2" />
 
         <label>Duracion en Horas</label>
         <input placeholder="Duración (horas)" @bind="eventoN.DuracionHoras" class="form-control mb-2" />
@@ -37,16 +36,19 @@
             <button class="btn btn-secondary ms-2" @onclick="Cancelar">Cancelar</button>
         </div>
     </div>
-    
 }
 @if (!string.IsNullOrEmpty(mensaje))
+{
+    if(exito)
     {
-        @if(exito){
         <div class="alert alert-success mt-3">@mensaje</div>
-    }else{
+    }
+    else
+    {
         <p class="alert alert-danger mt-3">@mensaje</p>
     }
-    }
+}
+
 @code {
     private EventoDeportivo eventoN = new();
     private DateTime fecha = DateTime.Today;
@@ -54,18 +56,18 @@
     private string? mensaje;
     private bool tienePermisos = false;
     private Usuario? usuarioActual;
-    private bool exito=false;
+    private bool exito = false;
+
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
-        tienePermisos = usuarioActual!.Permisos.Contains(Permiso.EventoAlta);
+        tienePermisos = usuarioActual?.Permisos.Contains(Permiso.EventoAlta) == true;
 
         if (!tienePermisos)
         {
             mensaje = "No tienes permisos para crear un evento.";
         }
     }
-
 
     private void CrearEventoNuevo()
     {
@@ -84,6 +86,13 @@
         }
     }
 
+    private void OnHoraChange(ChangeEventArgs e)
+    {
+        if (TimeOnly.TryParse(e.Value?.ToString(), out var result))
+        {
+            hora = result;
+        }
+    }
 
     private void Cancelar()
     {
