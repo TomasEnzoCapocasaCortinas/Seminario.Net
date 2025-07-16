@@ -41,7 +41,7 @@ builder.Services.AddTransient<ModificarEventoDeportivo>();
 builder.Services.AddTransient<ModificarUsuario>();
 builder.Services.AddTransient<ModificarPersona>();
 builder.Services.AddTransient<ReservaModificacion>();
-
+builder.Services.AddTransient<ReservaListadoPorEvento>();
 //Scoped: se crea una nueva instancia por cada solicitud
 builder.Services.AddScoped<CentroEventosSqlite>();
 builder.Services.AddScoped<IRepositorioEventoDeportivo, RepositorioEventoDeportivo>();

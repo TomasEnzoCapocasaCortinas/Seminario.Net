@@ -6,6 +6,7 @@
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Navigation
 
+
 <PageTitle>Mi Perfil</PageTitle>
 
 <h2>Mi Perfil</h2>
@@ -32,7 +33,7 @@
             <input placeholder="Nombre" @bind="usuario.Nombre" class="form-control mb-2" style="max-width: 400px;">
             <input placeholder="Apellido" @bind="usuario.Apellido" class="form-control mb-2" style="max-width: 400px;">
             <input placeholder="Email" @bind="usuario.Email" class="form-control mb-2" style="max-width: 400px;">
-            <input placeholder="Teléfono" @bind="usuario.Contrasenia" class="form-control mb-2" style="max-width: 400px;">
+            <input placeholder="Nueva Contraseña" @bind="contrasenia" class="form-control mb-2" style="max-width: 400px;">
             <button class="btn btn-success" @onclick="Guardar">Guardar</button>
         </div>
     }
@@ -48,6 +49,7 @@
 
 @code{
     private Usuario? usuario;
+    private string? contrasenia;
     private bool quieroModificar;
     private bool exito=false;
     private string? mensaje;
@@ -64,7 +66,7 @@
         mensaje = null;
         try
         {
-            modificarUsuario.Ejecutar(usuario!);
+            modificarUsuario.Ejecutar(usuario!, contrasenia);
             exito= true;
             mensaje= "Usuario actualizado con exito.";
         }
