@@ -1,4 +1,4 @@
-using System; //actualizado con base de datos
+using System;
 using System.Security.Cryptography;
 using System.Text;
 using CentroEventos.Aplicacion.Interfaces;
