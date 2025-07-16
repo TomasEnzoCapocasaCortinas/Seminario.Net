@@ -48,13 +48,12 @@
 
 @code{
     private Usuario? usuario;
-    private bool quieroModificar;
+    private bool quieroModificar=false;
     private bool exito=false;
     private string? mensaje;
     protected override void OnInitialized()
     {
         usuario = Sesion.ObtenerUsuarioActual();
-        quieroModificar=false;
     }
     void Modificar(){
         quieroModificar = true;
@@ -67,6 +66,7 @@
             modificarUsuario.Ejecutar(usuario!);
             exito= true;
             mensaje= "Usuario actualizado con exito.";
+            quieroModificar=false;
         }
         catch (Exception ex)
         {
