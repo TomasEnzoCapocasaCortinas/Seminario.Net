@@ -1,0 +1,132 @@
+﻿@page "/usuarios"
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.Interfaces
+@using CentroEventos.Aplicacion.Enumerativos
+@rendermode InteractiveServer
+@inject ServicioSesionUsuario Sesion
+@inject BajaUsuario bajaUsuario
+@*@inject ObtenerTodosEventosDeportivos listarEventos*@
+@inject ListarUsuarios listarUsuarios 
+@inject NavigationManager Nav
+
+<h1>Listado de usuarios</h1>
+<div class="d-flex justify-content-center mt-2">
+
+</div>
+@if (usuarios == null)
+{
+    <p>Cargando...</p>
+}
+else if (!usuarios.Any())
+{
+    <p>No hay usuarios registrados</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                @*<th>Acciones</th> *@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Usuario in usuarios)
+            {
+                <tr>
+                    <td>@Usuario.Id</td>
+                    <td>@Usuario.Nombre</td>
+                    <td>@Usuario.Apellido</td>
+                    <td>@Usuario.Email</td>
+                    <td>
+                        @if (Sesion.ObtenerUsuarioActual().Permisos.Contains(Permiso.UsuarioModificacion))
+                        {
+                        <button class="btn btn-sm btn-primary ms-1" @onclick="@(() => Modificar(Usuario.Id))">
+                        Modificar Permisos    <span class="oi oi-trash"></span>
+                        </button>
+                        }
+                        @if (Sesion.ObtenerUsuarioActual().Permisos.Contains(Permiso.UsuarioBaja))
+                        {
+                        <button class="btn btn-sm btn-danger ms-1" @onclick="@(() => Eliminar(Usuario.Id))">
+                        Eliminar    <span class="oi oi-trash"></span>
+                        </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    @if(exito){
+        <div class="alert alert-success mt-3">@mensaje</div>
+    }else{
+        <p class="alert alert-danger mt-3">@mensaje</p>
+    }
+}
+
+@code {
+    private Usuario? usuarioActual;
+    private List<Usuario>? usuarios;
+    private string? mensaje;
+    private bool TienePermiso(Permiso permiso)
+    {
+        return Sesion.EstaAutenticado() && Sesion.ObtenerUsuarioActual().Permisos.Contains(permiso);
+    }
+    private bool exito=false;
+    protected override void OnInitialized()
+    {
+        usuarioActual = Sesion.ObtenerUsuarioActual();
+        CargarUsuarios();
+    }
+
+    private void CargarUsuarios()
+    {
+        try
+        {
+            usuarios = listarUsuarios.Ejecutar();
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+        }
+    }
+
+    
+
+    private void Modificar (int id)
+    {
+        if (!TienePermiso(Permiso.UsuarioModificacion))
+        {
+            mensaje = "No tenés permiso para modificar personas.";
+            return;
+        }
+        Nav.NavigateTo("/otorgarpermisos");
+    }
+    private void Eliminar(int id)
+    {
+        try
+        {
+            if (!TienePermiso(Permiso.UsuarioBaja))
+            {
+                mensaje = "No tenés permiso para eliminar personas.";
+                return;
+            }
+            bajaUsuario.Ejecutar(id, usuarioActual!.Id);
+            exito=true;
+            mensaje = "usuario eliminado correctamente.";
+            CargarUsuarios();
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+        }
+    }
+    
+
+}
