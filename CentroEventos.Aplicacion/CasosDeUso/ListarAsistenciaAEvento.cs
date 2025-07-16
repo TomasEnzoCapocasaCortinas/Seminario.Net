@@ -18,14 +18,14 @@ public class ListarAsistenciaAEvento
 
     public List<Usuario> Ejecutar(int eventoId)
     {
-        var reservas = repositorioReserva.ObtenerReservasPorEvento(eventoId);
+        var reservas = repositorioReserva.ObtenerTodasReservasPorEvento(eventoId);
 
         var presente = new List<Usuario>();
 
         foreach (var reserva in reservas)
         {
             var usuario = repositorioUsuario.ObtenerPorId(reserva.UsuarioId);
-            if (usuario != null && reserva.EstadoAsistencia==EstadoAsistencia.Presente)
+            if ((usuario != null) && (reserva.EstadoAsistencia == EstadoAsistencia.Presente))
             {
                 presente.Add(usuario);
             }

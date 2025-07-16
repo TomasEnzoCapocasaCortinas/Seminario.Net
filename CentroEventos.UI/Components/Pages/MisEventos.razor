@@ -7,6 +7,7 @@
 @inject EliminarEventoDeportivo eliminarEventoDeportivo
 @inject ObtenerTodosEventosDeportivos obtenerEventosDeportivos
 @inject ReservaListadoPorEvento reservaListado
+@inject ListarAsistenciaAEvento listarAsistencia
 @inject NavigationManager NavigationManager
 
 <h1>Mis Eventos</h1>
@@ -18,44 +19,68 @@
 else
 {
     <table class="table">
-       <thead>
-           <tr>
-               <th>ID</th>
-               <th>Nombre</th>
-               <th>Descripción</th>
-               <th>Fecha y hora</th>
-               <th>Duración</th>
-               <th>Cupo</th>
-               <th>Acciones</th>
-           </tr>
-       </thead>
-       <tbody>
-           @foreach (var evento in miseventos)
-           {
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Fecha y hora</th>
+                <th>Duración</th>
+                <th>Cupo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var evento in miseventos)
+            {
                 var reservas = reservaListado.Ejecutar(evento.ID).Count;
-               <tr>
-                   <td>@evento.ID</td>
-                   <td>@evento.Nombre</td>
-                   <td>@evento.Descripcion</td>
-                   <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
-                   <td>@evento.DuracionHoras hs</td>
-                   <td>@(evento.CupoMaximo - reservas)</td>
+                <tr>
+                    <td>@evento.ID</td>
+                    <td>@evento.Nombre</td>
+                    <td>@evento.Descripcion</td>
+                    <td>@evento.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@evento.DuracionHoras hs</td>
+                    <td>@(evento.CupoMaximo - reservas)</td>
+                    <td> 
+                        <button class="btn btn-primary" @onclick=Editar>Editar</button>
+                        <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(evento)">Eliminar</button>
+                    </td>
+                </tr>
 
-                   <td> 
-                    <button class="btn btn-primary" @onclick=Editar>Editar</button>
-                    <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(evento)">Eliminar</button>
-                   </td>
-               </tr>
-           }
-       </tbody>
-            
+                @if (asistencias.ContainsKey(evento.ID))
+                {
+                    <tr>
+                        <td colspan="7">
+                            <strong>Asistentes (presentes):</strong>
+                            @if (asistencias[evento.ID].Any())
+                            {
+                                <ul>
+                                    @foreach (var u in asistencias[evento.ID])
+                                    {
+                                        <li>@u.Nombre @u.Apellido (@u.Email)</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p><em>No hubo asistentes presentes.</em></p>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
     </table>
 }
+
 @if (!string.IsNullOrEmpty(mensaje))
 {
-    @if(exito){
+    @if (exito)
+    {
         <div class="alert alert-success mt-3">@mensaje</div>
-    }else{
+    }
+    else
+    {
         <p class="alert alert-danger mt-3">@mensaje</p>
     }
 }
@@ -68,18 +93,34 @@ else
     private DialogoConfirmacion? dialogo;
     private string? mensaje;
     private EventoDeportivo? _EventoParaEliminar;
+    private bool exito = false;
+    private Dictionary<int, List<Usuario>> asistencias = new();
+
     private bool TienePermiso(Permiso permiso)
     {
         return Sesion.EstaAutenticado() && Sesion.ObtenerUsuarioActual().Permisos.Contains(permiso);
     }
-    private bool exito=false;
 
     protected override void OnInitialized()
     {
         usuarioActual = Sesion.ObtenerUsuarioActual();
+
         if (usuarioActual != null)
         {
-            miseventos = obtenerEventosDeportivos.Ejecutar().ToList();
+            miseventos = obtenerEventosDeportivos.Ejecutar()
+                .Where(e => e.ResponsableID == usuarioActual.Id)
+                .ToList();
+
+            // Cargar asistentes solo para eventos ya pasados
+            foreach (var evento in miseventos)
+            {
+                var fechaFin = evento.FechaHoraInicio.AddHours(evento.DuracionHoras);
+                if (fechaFin < DateTime.Now)
+                {
+                    var presentes = listarAsistencia.Ejecutar(evento.ID);
+                    asistencias[evento.ID] = presentes;
+                }
+            }
         }
     }
 
@@ -91,7 +132,8 @@ else
 
     private void Eliminar()
     {
-        try {
+        try
+        {
             if (_EventoParaEliminar != null)
             {
                 if (!TienePermiso(Permiso.EventoBaja))
@@ -99,19 +141,22 @@ else
                     mensaje = "No tenés permiso para eliminar eventos.";
                     return;
                 }
+
                 eliminarEventoDeportivo.Ejecutar(_EventoParaEliminar.ID);
-                miseventos = obtenerEventosDeportivos.Ejecutar().ToList();
+                miseventos = obtenerEventosDeportivos.Ejecutar()
+                    .Where(e => e.ResponsableID == usuarioActual!.Id)
+                    .ToList();
+
+                mensaje = "Evento eliminado correctamente.";
+                exito = true;
+                _EventoParaEliminar = null;
             }
         }
-    catch (Exception ex)
+        catch (Exception ex)
         {
             mensaje = ex.Message;
             exito = false;
-            return;
         }
-        mensaje = "Evento eliminado correctamente.";
-        exito = true;
-        _EventoParaEliminar = null;
     }
 
     private void Editar()

@@ -15,6 +15,7 @@ namespace CentroEventos.Aplicacion.Interfaces
         bool ExisteReservaParaPersonaYEvento(int usuarioId, int eventoDeportivoId);
         int ContarReservasPorEvento(int eventoDeportivoId);
         List<Reserva> ObtenerReservasPorEvento(int eventoDeportivoId);
+        List<Reserva> ObtenerTodasReservasPorEvento(int eventoId);
         List<Reserva> ObtenerReservasPorUsuario(int usuarioId);
     }
 }

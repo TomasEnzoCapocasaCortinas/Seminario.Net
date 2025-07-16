@@ -68,15 +68,21 @@ namespace CentroEventos.Repositorios
                 .Where(r => r.EventoDeportivoId == eventoDeportivoId)
                 .ToList();
         }
+        public List<Reserva> ObtenerTodasReservasPorEvento(int eventoId)
+        {
+            return dataBase.Reservas
+                .Where(r => r.EventoDeportivoId == eventoId)
+                .ToList();
+        }
     public List<Reserva> ObtenerReservasPorUsuario(int usuarioId)
-    {
-        var usuario = dataBase.Usuarios.FirstOrDefault(e => e.Id == usuarioId);
-        if (usuario == null)
-            return new List<Reserva>();
+        {
+            var usuario = dataBase.Usuarios.FirstOrDefault(e => e.Id == usuarioId);
+            if (usuario == null)
+                return new List<Reserva>();
 
-        return dataBase.Reservas
-            .Where(r => r.UsuarioId == usuarioId)
-            .ToList();
-    }
+            return dataBase.Reservas
+                .Where(r => r.UsuarioId == usuarioId)
+                .ToList();
+        }
     }
 }

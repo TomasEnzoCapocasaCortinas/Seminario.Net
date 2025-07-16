@@ -5,6 +5,8 @@
 @using CentroEventos.Aplicacion.Entidades
 @using CentroEventos.Aplicacion.Enumerativos
 @inject ReservaBaja bajaReserva
+@inject ModificarReservaAsistencia modificarAsistencia
+@inject ReservaListadoPorEvento listarPorEvento
 @inject ReservaListadoPorUsuario listaReservas
 @inject ObtenerEventoDeportivoPorId eventoPorId
 @inject ServicioSesionUsuario Sesion
@@ -111,18 +113,20 @@ else
         CargarReservas();
         StateHasChanged();
     }
-    private void MarcarAsistencia(int reservaId, EstadoAsistencia nuevoEstado)
+private void MarcarAsistencia(int reservaId, EstadoAsistencia nuevoEstado)
+{
+    try
     {
-        var reserva = misReservas!.FirstOrDefault(r => r.Id == reservaId);
-        if (reserva != null)
-        {
-            reserva.EstadoAsistencia = nuevoEstado;
-#line default
-        exito=true;
+        modificarAsistencia.Ejecutar(reservaId, nuevoEstado);
+        exito = true;
         mensaje = $"Asistencia marcada como {nuevoEstado}.";
-            CargarReservas();
-            StateHasChanged();
-        }
-    } 
+        CargarReservas();
+        StateHasChanged();
+    }
+    catch (Exception ex)
+    {
+        mensaje = ex.Message;
+        exito = false;
+    }
 }
-
+}
