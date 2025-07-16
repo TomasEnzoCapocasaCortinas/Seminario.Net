@@ -90,7 +90,14 @@
     private void BuscarEventoPorId()
     {
         mensaje = null;
-        eventoSeleccionado = buscarEventoPorId.Ejecutar(eventoIdBuscado);
+        try
+        {
+            eventoSeleccionado = buscarEventoPorId.Ejecutar(eventoIdBuscado);
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+        }
 
         if (eventoSeleccionado == null)
         {
@@ -121,24 +128,24 @@
             return;
         }
 
-        if (RepositorioReservas.ExisteReservaParaPersonaYEvento(usuarioActual!.Id, eventoSeleccionado.ID))
-        {
-            mensaje = "Ya estás inscripta en este evento.";
-            return;
-        }
-
         var nuevaReserva = new Reserva
         {
-            UsuarioId = usuarioActual.Id,
+            UsuarioId = usuarioActual!.Id,
             EventoDeportivoId = eventoSeleccionado.ID,
             FechaAltaReserva = DateTime.Now,
             EstadoAsistencia = EstadoAsistencia.Pendiente
         };
 
-        altaReserva.Ejecutar(nuevaReserva, usuarioActual.Id);
-        exito =true;
-        mensaje = "Reserva realizada correctamente.";
-        eventoSeleccionado = null;
-        eventosDisponibles = eventosConCupoDisponible.Ejecutar();
+        try{
+            altaReserva.Ejecutar(nuevaReserva, usuarioActual.Id);
+            exito =true;
+            mensaje = "Reserva realizada correctamente.";
+            eventoSeleccionado = null;
+            eventosDisponibles = eventosConCupoDisponible.Ejecutar();
+        }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+        }
     }
 }

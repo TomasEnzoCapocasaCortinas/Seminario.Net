@@ -6,25 +6,25 @@ namespace CentroEventos.Aplicacion.Validadores
 {
     public class ValidadorReserva
     {
-        private readonly IRepositorioPersona _repoPersona;
+        private readonly IRepositorioUsuario _repoUsuario;
         private readonly IRepositorioEventoDeportivo _repoEvento;
         private readonly IRepositorioReserva _repoReserva;
 
         public ValidadorReserva(
-            IRepositorioPersona repoPersona,
+            IRepositorioUsuario repoUsuario,
             IRepositorioEventoDeportivo repoEvento,
             IRepositorioReserva repoReserva)
         {
-            _repoPersona = repoPersona;
+            _repoUsuario = repoUsuario;
             _repoEvento = repoEvento;
             _repoReserva = repoReserva;
         }
 
         public void ValidarParaCrear(Reserva reserva)
         {   
-            // Validar existencia de Persona
-            if (_repoPersona.ObtenerPorId(reserva.UsuarioId)==null)
-                throw new ValidacionException($"La persona con ID {reserva.UsuarioId} no existe.");
+            // Validar existencia de Usuario
+            if (_repoUsuario.ObtenerPorId(reserva.UsuarioId)==null)
+                throw new ValidacionException($"La Usuario con ID {reserva.UsuarioId} no existe.");
 
             // Validar existencia de Evento
             var evento = _repoEvento.ObtenerPorId(reserva.EventoDeportivoId);
@@ -37,7 +37,7 @@ namespace CentroEventos.Aplicacion.Validadores
 
             // Validar duplicidad
             if (_repoReserva.ExisteReservaParaPersonaYEvento(reserva.UsuarioId, reserva.EventoDeportivoId))
-                throw new ValidacionException("La persona ya tiene una reserva para este evento.");
+                throw new ValidacionException("El Usuario ya tiene una reserva para este evento.");
 
             // Validar cupo
             int reservasActuales = _repoReserva.ContarReservasPorEvento(reserva.EventoDeportivoId);
