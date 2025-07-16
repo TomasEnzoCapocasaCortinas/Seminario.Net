@@ -13,12 +13,11 @@ public class ObtenerEventoDeportivoPorId
             _repositorio = repositorio;
         }
 
-        public EventoDeportivo Ejecutar(int id)
+        public EventoDeportivo? Ejecutar(int id)
         {
             var evento = _repositorio.ObtenerPorId(id);
             if (evento == null)
                 throw new EntidadNotFoundException("Evento no encontrado.");
-
             return evento;
         }
 }

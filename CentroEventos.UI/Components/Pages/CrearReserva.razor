@@ -5,8 +5,8 @@
 @using CentroEventos.Aplicacion.CasosDeUso
 @using CentroEventos.Aplicacion.Enumerativos
 @inject ReservaAlta altaReserva
-@inject ObtenerTodosEventosDeportivos listarEventos
 @inject ObtenerEventoDeportivoPorId buscarEventoPorId
+@inject ListarEventosConCupoDisponible eventosConCupoDisponible
 @inject ServicioSesionUsuario Sesion
 @inject NavigationManager Nav
 @inject IRepositorioReserva RepositorioReservas //esto hay que cambiarlo 
@@ -22,7 +22,7 @@
         <button class="btn btn-primary mt-1" @onclick="BuscarEventoPorId">Buscar</button>
     </div>
 
-    @if (eventoSeleccionado != null)
+    @if (eventoSeleccionado != null && mensaje==null)
     {
         <h5>Evento Seleccionado:</h5>
         <div class="card p-2 mb-3"style="max-width: 400px;">
@@ -83,7 +83,7 @@
         }
         if (usuarioActual != null)
         {
-            eventosDisponibles = listarEventos.Ejecutar();
+            eventosDisponibles = eventosConCupoDisponible.Ejecutar();
         }
     }
 
@@ -94,14 +94,20 @@
 
         if (eventoSeleccionado == null)
         {
-            exito=true;
             mensaje = "No se encontró ningún evento con ese ID.";
+            return;
+        }
+        if(!eventosDisponibles!.Any(e => e.ID == eventoSeleccionado.ID)
+){
+            mensaje = "Ese evento no tiene cupos disponibles";
+            return;
         }
     }
 
     private void SeleccionarEvento(EventoDeportivo ev)
     {
         eventoSeleccionado = ev;
+
         mensaje = null;
     }
 
@@ -121,14 +127,6 @@
             return;
         }
 
-        // Validar cupo disponible
-        var reservas = RepositorioReservas.ObtenerReservasPorEvento(eventoSeleccionado.ID).Count;
-        if (reservas >= eventoSeleccionado.CupoMaximo)
-        {
-            mensaje = "Este evento ya no tiene cupo disponible.";
-            return;
-        }
-
         var nuevaReserva = new Reserva
         {
             UsuarioId = usuarioActual.Id,
@@ -141,6 +139,6 @@
         exito =true;
         mensaje = "Reserva realizada correctamente.";
         eventoSeleccionado = null;
-        eventosDisponibles = listarEventos.Ejecutar();
+        eventosDisponibles = eventosConCupoDisponible.Ejecutar();
     }
 }
