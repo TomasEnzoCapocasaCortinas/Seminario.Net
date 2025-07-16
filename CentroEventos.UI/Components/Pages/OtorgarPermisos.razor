@@ -92,15 +92,27 @@
 
     private void GuardarPermisos()
     {
-        if (usuarioSeleccionado == null) return;
+        try{
+            if (usuarioSeleccionado == null) return;
 
-        usuarioSeleccionado.Permisos = permisosSeleccionados
-            .Where(p => p.Value)
-            .Select(p => p.Key)
-            .ToList();
+            usuarioSeleccionado.Permisos = permisosSeleccionados
+                .Where(p => p.Value)
+                .Select(p => p.Key)
+                .ToList();
 
-        editarUsuario.Ejecutar(usuarioSeleccionado, null);
-        exito=true;
-        mensaje = "Permisos actualizados correctamente.";
+            editarUsuario.Ejecutar(usuarioSeleccionado, null);
+            exito=true;
+            mensaje = "Permisos actualizados correctamente.";
+            }
+        catch (Exception ex)
+        {
+            mensaje = ex.Message;
+            exito = false;
+        }
+        finally
+        {
+            usuarioSeleccionado = null; // Reset after saving
+            permisosSeleccionados.Clear(); // Clear the permissions selection
+        }
     }
 }

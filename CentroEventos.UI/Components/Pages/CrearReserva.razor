@@ -104,8 +104,7 @@
             mensaje = "No se encontró ningún evento con ese ID.";
             return;
         }
-        if(!eventosDisponibles!.Any(e => e.ID == eventoSeleccionado.ID)
-){
+        if(!eventosDisponibles!.Any(e => e.ID == eventoSeleccionado.ID)){
             mensaje = "Ese evento no tiene cupos disponibles";
             return;
         }

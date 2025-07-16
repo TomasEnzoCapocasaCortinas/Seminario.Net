@@ -91,16 +91,27 @@ else
 
     private void Eliminar()
     {
-        if (_EventoParaEliminar != null)
-        {
-            if (!TienePermiso(Permiso.EventoBaja))
+        try {
+            if (_EventoParaEliminar != null)
             {
-                mensaje = "No tenés permiso para eliminar eventos.";
-                return;
+                if (!TienePermiso(Permiso.EventoBaja))
+                {
+                    mensaje = "No tenés permiso para eliminar eventos.";
+                    return;
+                }
+                eliminarEventoDeportivo.Ejecutar(_EventoParaEliminar.ID);
+                miseventos = obtenerEventosDeportivos.Ejecutar().ToList();
             }
-            eliminarEventoDeportivo.Ejecutar(_EventoParaEliminar.ID);
-            miseventos = obtenerEventosDeportivos.Ejecutar().ToList();
         }
+    catch (Exception ex)
+        {
+            mensaje = ex.Message;
+            exito = false;
+            return;
+        }
+        mensaje = "Evento eliminado correctamente.";
+        exito = true;
+        _EventoParaEliminar = null;
     }
 
     private void Editar()
