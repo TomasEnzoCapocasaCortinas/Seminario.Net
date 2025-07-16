@@ -1,7 +1,8 @@
 using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Enumerativos; // agregue esto
+using CentroEventos.Aplicacion.Enumerativos;
+using CentroEventos.Aplicacion.Validadores;
 
 namespace CentroEventos.Aplicacion.CasosDeUso
 {
@@ -11,36 +12,28 @@ namespace CentroEventos.Aplicacion.CasosDeUso
         private readonly IRepositorioEventoDeportivo _repoEvento;
         private readonly IRepositorioUsuario _repoUsuario;
         private readonly IServicioAutorizacion _autorizacion;
+        private readonly ValidadorReserva _validador;
 
         public ReservaAlta(
             IRepositorioReserva repoReserva,
             IRepositorioEventoDeportivo repoEvento,
             IRepositorioUsuario repoUsuario,
-            IServicioAutorizacion autorizacion)
+            IServicioAutorizacion autorizacion,
+            ValidadorReserva validador)
         {
             _repoReserva = repoReserva;
             _repoEvento = repoEvento;
             _repoUsuario = repoUsuario;
             _autorizacion = autorizacion;
+            _validador = validador;
         }
 
         public void Ejecutar(Reserva datosReserva, int idUsuario)
         {
-            if (!_autorizacion.PoseeElPermiso(idUsuario, Permiso.ReservaAlta)) // poseeElpermiso, agregue permiso.reservaalta
-                throw new FalloAutorizacionException("No está autorizado para hacer una alta"); //agregue el mensaje
+            if (!_autorizacion.PoseeElPermiso(idUsuario, Permiso.ReservaAlta))
+                throw new FalloAutorizacionException("No está autorizado para hacer una alta");
 
-            var usuario = _repoUsuario.ObtenerPorId(datosReserva.UsuarioId)
-                ?? throw new EntidadNotFoundException("Usuario no encontrado");
-
-            var evento = _repoEvento.ObtenerPorId(datosReserva.EventoDeportivoId) ?? throw new EntidadNotFoundException("Evento deportivo no encontrado");
-
-            var reservasEvento = _repoReserva.ObtenerReservasPorEvento(evento.ID); //obtener reservas por evento, ID con mayus
-
-            if (reservasEvento.Count >= evento.CupoMaximo)
-                throw new CupoExcedidoException("Los cupos están agotados"); //agregue el mensaje
-
-            if (reservasEvento.Any(r => r.UsuarioId == datosReserva.UsuarioId))
-                throw new DuplicadoException("Reserva duplicada para este evento");
+            _validador.ValidarParaCrear(datosReserva);
 
             datosReserva.FechaAltaReserva = DateTime.Now;
             datosReserva.EstadoAsistencia = EstadoAsistencia.Pendiente;

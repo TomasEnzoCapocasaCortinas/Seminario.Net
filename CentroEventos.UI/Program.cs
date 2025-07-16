@@ -53,6 +53,7 @@ builder.Services.AddScoped<IRepositorioReserva, RepositorioReserva>();
 
 builder.Services.AddScoped<ValidadorUsuario>();
 builder.Services.AddScoped<PersonaValidador>();
+builder.Services.AddScoped<ValidadorReserva>();
 builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacion>();
 builder.Services.AddScoped<ServicioSesionUsuario, ServicioSesionUsuario>();
 builder.Services.AddScoped<ServicioUsuario, ServicioUsuario>();

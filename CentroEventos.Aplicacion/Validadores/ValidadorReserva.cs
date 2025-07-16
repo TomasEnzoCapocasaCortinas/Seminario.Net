@@ -21,7 +21,7 @@ namespace CentroEventos.Aplicacion.Validadores
         }
 
         public void ValidarParaCrear(Reserva reserva)
-        {
+        {   
             // Validar existencia de Persona
             if (_repoPersona.ObtenerPorId(reserva.UsuarioId)==null)
                 throw new ValidacionException($"La persona con ID {reserva.UsuarioId} no existe.");
@@ -30,6 +30,10 @@ namespace CentroEventos.Aplicacion.Validadores
             var evento = _repoEvento.ObtenerPorId(reserva.EventoDeportivoId);
             if (evento is null)
                 throw new ValidacionException($"El evento con ID {reserva.EventoDeportivoId} no existe.");
+
+            // Valida la hora de la inscripcion
+            if (evento.FechaHoraInicio <= DateTime.Now)
+                throw new ValidacionException("No se pueden reservar eventos que ya comenzaron.");
 
             // Validar duplicidad
             if (_repoReserva.ExisteReservaParaPersonaYEvento(reserva.UsuarioId, reserva.EventoDeportivoId))
