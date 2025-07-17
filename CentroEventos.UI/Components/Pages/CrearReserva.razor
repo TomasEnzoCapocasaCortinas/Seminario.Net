@@ -92,21 +92,23 @@
         try
         {
             eventoSeleccionado = buscarEventoPorId.Ejecutar(eventoIdBuscado);
+            if (eventoSeleccionado == null)
+            {
+                mensaje = "No se encontró ningún evento con ese ID.";
+                return;
+            }
+            if(!eventosDisponibles!.Any(e => e.ID == eventoSeleccionado.ID))
+            {
+                mensaje = "Ese evento no tiene cupos disponibles";
+                return;
+            }
         }
         catch (Exception ex)
         {
             mensaje = ex.Message;
         }
 
-        if (eventoSeleccionado == null)
-        {
-            mensaje = "No se encontró ningún evento con ese ID.";
-            return;
-        }
-        if(!eventosDisponibles!.Any(e => e.ID == eventoSeleccionado.ID)){
-            mensaje = "Ese evento no tiene cupos disponibles";
-            return;
-        }
+        
     }
 
     private void SeleccionarEvento(EventoDeportivo ev)
