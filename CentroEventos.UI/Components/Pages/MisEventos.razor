@@ -108,7 +108,6 @@ else
         if (usuarioActual != null)
         {
             miseventos = obtenerEventosDeportivos.Ejecutar()
-                .Where(e => e.ResponsableID == usuarioActual.Id)
                 .ToList();
 
             // Cargar asistentes solo para eventos ya pasados
@@ -144,7 +143,6 @@ else
 
                 eliminarEventoDeportivo.Ejecutar(_EventoParaEliminar.ID);
                 miseventos = obtenerEventosDeportivos.Ejecutar()
-                    .Where(e => e.ResponsableID == usuarioActual!.Id)
                     .ToList();
 
                 mensaje = "Evento eliminado correctamente.";

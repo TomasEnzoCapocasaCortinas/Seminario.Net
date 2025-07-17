@@ -95,9 +95,12 @@ else
             var eventosIds = misReservas.Select(r => r.EventoDeportivoId).Distinct();
             foreach (var id in eventosIds)
             {
-                var evento = eventoPorId.Ejecutar(id);
-                if (evento != null)
-                    eventosPorId[id] = evento;
+                if (!eventosPorId.ContainsKey(id))
+                {
+                    var evento = eventoPorId.Ejecutar(id);
+                    if (evento != null)
+                        eventosPorId[id] = evento;
+                }
             }
     }
      private void CancelarReserva(int reservaId)
