@@ -1,5 +1,5 @@
 using System;
-using CentroEventos.Aplicacion.Interfaces; //agregue esto
+using CentroEventos.Aplicacion.Interfaces; 
 using CentroEventos.Aplicacion.Excepciones;
 
 using System;

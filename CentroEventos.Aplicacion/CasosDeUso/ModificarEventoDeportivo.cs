@@ -1,8 +1,8 @@
 using System;
-using CentroEventos.Aplicacion.Validadores; //agregue esto
-using CentroEventos.Aplicacion.Interfaces; //agregue esto
-using CentroEventos.Aplicacion.Entidades; //agregue esto
-using CentroEventos.Aplicacion.Excepciones; //agregue esto
+using CentroEventos.Aplicacion.Validadores; 
+using CentroEventos.Aplicacion.Interfaces; 
+using CentroEventos.Aplicacion.Entidades; 
+using CentroEventos.Aplicacion.Excepciones; 
 
 namespace CentroEventos.Aplicacion.CasosDeUso;
 

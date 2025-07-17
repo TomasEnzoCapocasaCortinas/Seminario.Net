@@ -1,6 +1,6 @@
 using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Enumerativos; //agregue esto
+using CentroEventos.Aplicacion.Enumerativos; 
 
 namespace CentroEventos.Aplicacion.CasosDeUso
 {
@@ -19,8 +19,8 @@ namespace CentroEventos.Aplicacion.CasosDeUso
 
         public void Ejecutar(int idReserva, int idUsuario)
         {
-            if (!_autorizacion.PoseeElPermiso(idUsuario, Permiso.ReservaBaja)) //cambios: antes era PoseePermiso , "ReservaBaja"
-                throw new FalloAutorizacionException("No posee el permiso de dar de baja una reserva"); //no se que string poner
+            if (!_autorizacion.PoseeElPermiso(idUsuario, Permiso.ReservaBaja)) 
+                throw new FalloAutorizacionException("No posee el permiso de dar de baja una reserva"); 
 
             var reserva = _repoReserva.ObtenerPorId(idReserva)
                 ?? throw new EntidadNotFoundException("Reserva no encontrada");

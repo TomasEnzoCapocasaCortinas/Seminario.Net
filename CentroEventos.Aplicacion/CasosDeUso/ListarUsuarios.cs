@@ -1,5 +1,5 @@
-using CentroEventos.Aplicacion.Interfaces; //agregue esto
-using CentroEventos.Aplicacion.Entidades; //agregue esto
+using CentroEventos.Aplicacion.Interfaces; 
+using CentroEventos.Aplicacion.Entidades; 
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
 public class ListarUsuarios

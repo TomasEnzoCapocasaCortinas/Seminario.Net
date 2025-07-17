@@ -1,8 +1,8 @@
 using System;
-using CentroEventos.Aplicacion.Interfaces; //puse esto
-using CentroEventos.Aplicacion.Excepciones; //puse esto
-using CentroEventos.Aplicacion.Enumerativos; //puse esto
-namespace CentroEventos.Aplicacion.CasosDeUso; // cambie CentroDeportivo por CentroEventos
+using CentroEventos.Aplicacion.Interfaces; 
+using CentroEventos.Aplicacion.Excepciones; 
+using CentroEventos.Aplicacion.Enumerativos; 
+namespace CentroEventos.Aplicacion.CasosDeUso; 
 
 public class BajaPersona
 {
@@ -22,7 +22,7 @@ public class BajaPersona
                 throw new EntidadNotFoundException("No se encontró la persona con el ID especificado.");
         }
         else {
-            throw new FalloAutorizacionException("No posee el permiso para realizar esta accion."); // un ;
+            throw new FalloAutorizacionException("No posee el permiso para realizar esta accion.");
         }
     }
 }
